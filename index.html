@@ -530,6 +530,9 @@ table.io td,table.io th{border:2px solid #000;background:#0006;padding:4px 10px;
 @media (min-width:1000px) and (min-aspect-ratio:1/1){#mpov .box{max-width:900px;display:grid;grid-template-columns:1fr 1fr;gap:0 18px;align-items:start}#mpov .box>h2,#mpov .box>.mut,#mpov .box>.row,#mpov .box>.mpstat{grid-column:1/-1}#mpov .mpqrimg{grid-row:3/6}#mpov .box>.lbl{margin-top:10px}}
 @media (min-width:1000px) and (min-aspect-ratio:1/1){#mpov .mpqrimg{grid-column:1;grid-row:3/9}#mpov .box>details,#mpov .box>.lbl,#mpov .box>.mpcam,#mpov .box>.mpcamrow{grid-column:2}}
 #mpPair .mpqrimg{width:min(100%,520px)}
+.mprow2.a4{grid-template-columns:1fr 1fr;row-gap:2px}
+.mpanote{font-weight:800;font-size:14px;margin-top:6px}
+#mpGame button{min-height:58px}
 </style></head>
 <body>
 <section id="home" class="scr on">
@@ -724,10 +727,17 @@ table.io td,table.io th{border:2px solid #000;background:#0006;padding:4px 10px;
    <div id="mpPending"></div>
    <div class="sec blk mpsec"><div class="lbl">Agents in the room <span id="mpCount"></span></div><div class="mproster" id="mpRoster"></div></div>
    <div class="sec blk mpsec" id="mpSet">
-    <div class="lbl">Game mode</div><div class="mpopt c2" id="mpMode"><button data-v="vs">⚔️ VS<small>everyone for themselves</small></button><button data-v="team">🤝 Teams<small>Red vs Blue, team average</small></button></div>
+    <div class="lbl">Game</div><div class="mpopt c2" id="mpGame"><button data-v="dials">🔓 Vault Race<small>same dials for everyone</small></button><button data-v="arena">🏟️ Arena<small>Glitch Vault · Double Decker</small></button></div>
+    <div id="mpDialSet"><div class="lbl">Game mode</div><div class="mpopt c2" id="mpMode"><button data-v="vs">⚔️ VS<small>everyone for themselves</small></button><button data-v="team">🤝 Teams<small>Red vs Blue, team average</small></button></div>
     <div class="lbl">Topics</div><div class="mpopt c2" id="mpTopics"><button data-v="week">This week's topics</button><button data-v="mix">Mix of everything</button></div>
     <div class="mprow2"><div><div class="lbl">Dials</div><div class="seg" id="mpDials"><button data-v="5">5</button><button data-v="8">8</button><button data-v="12">12</button></div></div>
-    <div><div class="lbl">Level</div><div class="seg" id="mpLvl"><button data-v="1">Warm-up</button><button data-v="2">Standard</button><button data-v="3">Stretch</button></div></div></div>
+    <div><div class="lbl">Level</div><div class="seg" id="mpLvl"><button data-v="1">Warm-up</button><button data-v="2">Standard</button><button data-v="3">Stretch</button></div></div></div></div>
+    <div id="mpArenaSet" hidden><div class="lbl">Power-up questions</div><div class="mpopt c2" id="mpTopics2"><button data-v="week">This week's topics</button><button data-v="mix">Mix of everything</button></div>
+     <div class="mprow2 a4"><div><div class="lbl">Timer (seconds)</div><div class="seg" id="mpFuse"><button data-v="10">10</button><button data-v="15">15</button><button data-v="20">20</button></div></div>
+     <div><div class="lbl">Bots</div><div class="seg" id="mpBots"><button data-v="0">0</button><button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button></div></div>
+     <div><div class="lbl">Power-ups</div><div class="seg" id="mpPure"><button data-v="0">🧮 Math</button><button data-v="1">✋ None</button></div></div>
+     <div><div class="lbl">Upper floor</div><div class="seg" id="mpFloor"><button data-v="glass">Glass</button><button data-v="classic">Classic</button></div></div></div>
+     <div class="mut mpanote">Everyone for themselves: bump someone to pass the Glitch Vault. Last agent standing wins.</div></div>
    </div>
    <div class="mpteams" id="mpTeamBtns" hidden><button class="btn r" data-team="red">🔴 Join Red</button><button class="btn" data-team="blue">🔵 Join Blue</button></div>
    <div class="mpgobar"><button class="btn y mpready" id="mpReady">✋ I'm ready</button><button class="btn g mpstartb" id="mpStart">▶ Start game</button></div>
@@ -1569,7 +1579,7 @@ function arenaNew(cfg){
  P.filter(p=>p.human).forEach(p=>{AS.mq[p.id]={q:quickQ(S.set.topics),cool:0,alt:pick(['shield','speed'])};});
  spawnAll();
 }
-function spawnAll(){const sp=shuffle(SPAWNS);AS.players.filter(p=>!p.out).forEach((p,i)=>{const s=sp[i%sp.length];Object.assign(p,{x:s[0],y:s[1]+.01,z:s[2],vx:0,vy:0,vz:0,yaw:Math.atan2(-s[0],-s[2]),boostT:0,speedT:0,shieldT:0,climb:false,tj:0,wallHops:0});if(p.bot){p.bot.wp=[];p.bot.goal=null;}});}
+function spawnAll(){AS.sp=(AS.sp||0)+1;const sp=shuffle(SPAWNS);AS.players.filter(p=>!p.out).forEach((p,i)=>{const s=sp[i%sp.length];Object.assign(p,{x:s[0],y:s[1]+.01,z:s[2],vx:0,vy:0,vz:0,yaw:Math.atan2(-s[0],-s[2]),boostT:0,speedT:0,shieldT:0,climb:false,tj:0,wallHops:0});if(p.bot){p.bot.wp=[];p.bot.goal=null;}});}
 function alive(){return AS.players.filter(p=>!p.out);}
 /* ---------- physics ---------- */
 const PH=.4,PHT=1.8;
@@ -1616,9 +1626,9 @@ function simPlayer(p,inp,dt){
 }
 function simStep(st,inputs,dt){
  st.t+=dt;
- const moveAll=(useInputs)=>{for(const p of st.players)simPlayer(p,useInputs?(inputs[p.id]||{}):{cy:p.yaw},dt);};
+ const moveAll=(useInputs)=>{for(const p of st.players)if(!p.remote)simPlayer(p,useInputs?(inputs[p.id]||{}):{cy:p.yaw},dt);};
  if(st.phase==='count'){st.phaseT-=dt;moveAll(false);
-  if(st.phaseT<=0){st.phase='play';const al=alive();st.holder=pick(al).id;st.fuse=ARENA.FUSE;st.timeUsed={};st.graceFrom=-1;st.graceT=0;st.events.push({e:'start',id:st.holder});}return;}
+  if(st.phaseT<=0){st.phase='play';const al=alive();st.holder=pick(al).id;st.fuse=st.fuseLen||ARENA.FUSE;st.timeUsed={};st.graceFrom=-1;st.graceT=0;st.events.push({e:'start',id:st.holder});}return;}
  if(st.phase==='poof'){st.phaseT-=dt;moveAll(true);
   if(st.phaseT<=0){const al=alive();
    if(st.mode==='duel'){const w=al[0];if(w){st.wins[w.id]++;}
@@ -1840,13 +1850,14 @@ function hud(){
 /* ---------- math power strip ---------- */
 const REW={shield:['🛡','2s shield'],speed:['⚡','Speed spark'],time:['⏱','+2 sec']};
 function rewFor(pid){const m=AS.mq[pid];return AS.holder===pid&&!AS.timeUsed[pid]&&AS.phase==='play'?'time':m.alt;}
-function stripHTML(v){const m=AS.mq[v.pid];if(!m||AS.pure)return '';const q=m.q;const rk=rewFor(v.pid),rw=REW[rk];m.shown=rk;const keys=v.pid===0?['1','2','3']:['8','9','0'];
+function stripHTML(v){const m=AS.mq[v.pid];if(!m||AS.pure)return '';const q=m.q;const rk=rewFor(v.pid),rw=REW[rk];m.shown=rk;const keys=AV.length<2||v===AV[0]?['1','2','3']:['8','9','0'];
  return `<div class="aq blk"><span class="rw" title="${rw[1]}">${rw[0]}</span>${q.p}</div>${q.ch.map((c,i)=>`<button class="btn d" data-aopt="${i}">${c}<small>${keys[i]}</small></button>`).join('')}`;}
 function renderStrip(v){const el=v.el.querySelector('.astrip');el.hidden=!!AS.pure;el.innerHTML=stripHTML(v);el.classList.toggle('cool',!AS.pure&&(AS.mq[v.pid].cool>0||AS.players[v.pid].out));}
 function answer(v,i){const m=AS.mq[v.pid],p=AS.players[v.pid];if(AS.pure||!m||m.cool>0||p.out||AS.phase==='over')return;
- if(i===m.q.a){grantBoost(p,rewFor(v.pid));p.mathOK++;SFX.coin();m.q=quickQ(S.set.topics);m.alt=m.alt==='shield'?'speed':'shield';
+ if(window.NETA&&NETA.guest){netArenaAns(i);return;}
+ if(i===m.q.a){grantBoost(p,rewFor(v.pid));p.mathOK++;SFX.coin();m.q=quickQ(AS.qt||S.set.topics);m.alt=m.alt==='shield'?'speed':'shield';
   m.cool=1.2;setTimeout(()=>{m.cool=0;if(AS)renderStrip(v);},1200);}
- else{SFX.wrong();m.cool=1.6;flashView(v,'Oops! New one in a sec…');setTimeout(()=>{m.q=quickQ(S.set.topics);m.cool=0;if(AS)renderStrip(v);},1600);}
+ else{SFX.wrong();m.cool=1.6;flashView(v,'Oops! New one in a sec…');setTimeout(()=>{m.q=quickQ(AS.qt||S.set.topics);m.cool=0;if(AS)renderStrip(v);},1600);}
  renderStrip(v);}
 function flashView(v,msg){const f=v.el.querySelector('.aflash');f.textContent=msg;f.style.opacity=1;clearTimeout(f._t);f._t=setTimeout(()=>f.style.opacity=0,900);}
 /* ---------- input (keyboard + touch) ---------- */
@@ -1873,7 +1884,7 @@ function canvasDrag(){const cv=$('#acv');
 const P1K={up:['KeyW'],down:['KeyS'],left:['KeyA'],right:['KeyD'],jump:['Space'],lock:['ShiftLeft','KeyF'],cl:['KeyQ'],cr:['KeyE'],ans:['Digit1','Digit2','Digit3']};
 const P1SOLO={up:['KeyW','ArrowUp'],down:['KeyS','ArrowDown'],left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight'],jump:['Space'],lock:['ShiftLeft','ShiftRight','KeyF'],cl:['KeyQ'],cr:['KeyE'],ans:['Digit1','Digit2','Digit3']};
 const P2K={up:['ArrowUp'],down:['ArrowDown'],left:['ArrowLeft'],right:['ArrowRight'],jump:['Enter','Numpad0'],lock:['ShiftRight','Slash'],cl:['Comma'],cr:['Period'],ans:['Digit8','Digit9','Digit0']};
-const kmap=v=>v.pid===0?(AV.length>1?P1K:P1SOLO):P2K;
+const kmap=v=>AV.length<2?P1SOLO:v===AV[0]?P1K:P2K;
 const down=(v,a)=>kmap(v)[a].some(k=>KEYS[k]);
 addEventListener('keydown',e=>{if(cur!=='arena'||!AS)return;if(e.code==='Escape'){$('#aQuit').click();return;}
  if(!KEYS[e.code]){AV.forEach(v=>{const km=kmap(v);if(km.jump.includes(e.code))v.kjump=true;if(km.lock.includes(e.code))v.lock=!v.lock;const ai=km.ans.indexOf(e.code);if(ai>=0&&AS.mq[v.pid]&&ai<AS.mq[v.pid].q.ch.length)answer(v,ai);});}
@@ -1891,8 +1902,9 @@ function gatherInput(v,dt){let mx=0,my=0;if(down(v,'up'))my+=1;if(down(v,'down')
 /* ---------- loop ---------- */
 let aRAF=0,aLast=0,aAcc=0,aStripT=0;
 function arenaStart(){
- arenaNew(ACFG);window.ACAM=null;
- const vw=$('#aviews');vw.innerHTML='';AV=AS.players.filter(p=>p.human).map((p,i,arr)=>{const v={pid:p.id,cy:Math.atan2(-p.x,-p.z),lock:false,el:viewEl(i,arr.length)};vw.appendChild(v.el);bindTouch(v);return v;});
+ arenaNew(ACFG);arenaViews(AS.players.filter(p=>p.human).map(p=>p.id));}
+function arenaViews(pids){window.ACAM=null;
+ const vw=$('#aviews');vw.innerHTML='';AV=pids.map(id=>AS.players[id]).map((p,i,arr)=>{const v={pid:p.id,cy:Math.atan2(-p.x,-p.z),lock:false,el:viewEl(i,arr.length)};vw.appendChild(v.el);bindTouch(v);return v;});
  go('arena');
  if(!GL){try{if(!glInit($('#acv'))){$('#anogl').hidden=false;return;}canvasDrag();}catch(e){$('#anogl').hidden=false;console.warn(e);return;}}
  buildDeckBuf(AS.floor);FX=[];
@@ -1903,11 +1915,13 @@ function arenaFrame(now){
  if(cur!=='arena'||!AS)return;aRAF=requestAnimationFrame(arenaFrame);
  let dt=Math.min(.1,(now-aLast)/1000);aLast=now;
  const step=1/60;aAcc+=dt;let n=0;
- while(aAcc>=step&&n<6){const inputs={};AV.forEach(v=>{inputs[v.pid]=gatherInput(v,step);});AS.players.forEach(p=>{if(!p.human)inputs[p.id]=botThink(p,step);});
+ if(window.NETA&&NETA.guest)netGuestStep(dt);
+ else{while(aAcc>=step&&n<6){const inputs={};AV.forEach(v=>{inputs[v.pid]=gatherInput(v,step);});AS.players.forEach(p=>{if(!p.human)inputs[p.id]=botThink(p,step);});
   simStep(AS,inputs,step);aAcc-=step;n++;}
+  if(window.NETA)netHostTick(now);}
  handleEvents();
  FX=FX.filter(f=>(f.l-=dt)>0);FX.forEach(f=>{f.vy-=(f.g!==undefined?f.g:20)*dt;f.x+=f.vx*dt;f.y+=f.vy*dt;f.z+=f.vz*dt;if(f.k==='conf'){f.vx*=.98;f.vz*=.98;}});
- render(now/1000);hud();
+ if(window.NETA)netInterp(now,true);render(now/1000);if(window.NETA)netInterp(now,false);hud();
 }
 function burst(x,y,z,c,n=18){for(let i=0;i<n;i++)FX.push({x,y,z,vx:(Math.random()-.5)*8,vy:Math.random()*8+2,vz:(Math.random()-.5)*8,l:.9+Math.random()*.6,s:.12+Math.random()*.12,c});}
 function poofFX(x,y,z){
@@ -1926,7 +1940,9 @@ function handleEvents(){const ev=AS.events;AS.events=[];let strips=false;
   if(e.e==='wallhop'){tone(620,0,.07,'triangle',.05,1000);burst(p.x,p.y+1,p.z,'#fff',5);mine.forEach(v=>flashView(v,'Wall hop!'));}
   if(e.e==='grab'){tone(450,0,.05,'triangle',.03,650);}
   if(e.e==='boost'&&p.human){mine.forEach(v=>flashView(v,{speed:'⚡ Speed spark!',shield:'🛡 Shield for 2 seconds!',time:'⏱ +2 seconds!'}[e.k]));}
-  if(e.e==='over')setTimeout(arenaOver,1300);}
+  if(e.e==='oops'){mine.forEach(v=>{SFX.wrong();flashView(v,'Oops! New one in a sec…');});}
+  if(e.e==='boost'&&window.NETA&&NETA.guest&&mine.length)SFX.coin();
+  if(e.e==='over'){if(window.NETA)netArenaOverSoon();else setTimeout(arenaOver,1300);}}
  if(strips)AV.forEach(v=>{if(AS.mq[v.pid]&&AS.mq[v.pid].shown!==rewFor(v.pid))renderStrip(v);});
  if(AV.length&&(performance.now()-aStripT>250)){aStripT=performance.now();AV.forEach(v=>{const el=v.el.querySelector('.astrip');const want=!!(AS.mq[v.pid]&&(AS.mq[v.pid].cool>0||AS.players[v.pid].out));if(el.classList.contains('cool')!==want)el.classList.toggle('cool',want);});}
 }
@@ -1948,7 +1964,7 @@ function arenaSetupRender(){const duel=ACFG.game==='duel';
  $('#aKeys').innerHTML=ACFG.mode===2?'Player 1: WASD move, Space jump, Left Shift lock-on, Q/E turn, 1 2 3 answer. Player 2: arrows move, Enter jump, Right Shift lock-on, comma/period turn, 8 9 0 answer. Touch: each side has its own joystick &amp; buttons.':'Keyboard: WASD or arrows move, Space jump, Shift lock-on, Q/E turn the camera, 1 2 3 answer. Touch: joystick on the left, Jump and 🎯 Lock on the right, drag to look around.';}
 SEGS.forEach(([id,k,cv])=>$(id).addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b||b.disabled)return;ACFG[k]=cv(b.dataset.v);if(ACFG.mode===1&&ACFG.bots===0)ACFG.bots=1;if(ACFG.bots>6-ACFG.mode)ACFG.bots=6-ACFG.mode;arenaSetupRender();}));
 $('#aGo').onclick=()=>{SFX.key();arenaStart();};
-$('#aQuit').onclick=()=>{ov(`<h2>Leave the arena?</h2><div class="row"><button class="btn g" id="aStay" data-def>Keep playing</button><button class="btn r" id="aLeave">Leave</button></div>`);$('#aStay').onclick=ovClose;$('#aLeave').onclick=()=>{ovClose();go('arenaSetup');};};
+$('#aQuit').onclick=()=>{if(window.NETA){netArenaQuit();return;}ov(`<h2>Leave the arena?</h2><div class="row"><button class="btn g" id="aStay" data-def>Keep playing</button><button class="btn r" id="aLeave">Leave</button></div>`);$('#aStay').onclick=ovClose;$('#aLeave').onclick=()=>{ovClose();go('arenaSetup');};};
 addEventListener('resize',()=>{if(cur==='arena')layoutViews();});
 /* ---------- netcode hooks (for the later WebRTC add-on) ---------- */
 window.ArenaNet={snapshot:()=>JSON.stringify(AS),apply:s=>{const n=JSON.parse(s);if(AS)Object.assign(AS,n);else AS=n;},inputFor:pid=>{const v=AV.find(x=>x.pid===pid);return v?gatherInput(v,1/60):{};},step:(inputs,dt)=>simStep(AS,inputs,dt)};
@@ -2057,13 +2073,15 @@ function guestMsg(m){if(!MP||MP.role!=='guest')return;const t=m&&m.t;
  else if(t==='start')netBegin(m);
  else if(t==='board'){MP.board=m.B;if(cur==='game')netHud();if(cur==='mpEnd')renderEnd();}
  else if(t==='toast'){if(m.id!==MP.me)fb(esc(m.m),2200,'#0f5141');}
- else if(t==='end'){MP.res=m.R;showEnd();}}
+ else if(t==='end'){MP.res=m.R;showEnd();}
+ else if(t==='astart')guestArenaStart(m);
+ else if(t==='asnap'){if(window.NETA&&NETA.guest)netApplySnap(m);}}
 function guestLost(){if(!MP||MP.gone)return;const j=MP.joining;netCleanup();if(j&&(cur==='mpJoin'||cur==='mpPair')){joinStat('⚠ The connection dropped. Try again.',true);return;}
  go('mp');ov(`<h2>Connection lost</h2><div class="mut" style="font-weight:800;font-size:18px">The room closed or the WiFi dropped. You can join again with the code.</div><div class="row"><button class="btn g" data-def onclick="ovClose()">OK</button></div>`);}
 
 /* ---- host ---- */
 function mkP(id,name,eq,col,host){return {id,name,eq,col,team:'red',ready:!!host,host:!!host,x:.36+Math.random()*.28,y:.4+Math.random()*.45,score:0,done:0,fin:false,time:0,left:false};}
-function mpHost(){netCleanup();MP={role:'host',me:0,H:{code:null,codeErr:null,mode:'vs',topics:'week',dials:8,lvl:2,phase:'lobby',players:[mkP(0,myName(),cleanEq(S.eq),NCOLS[0],true)],pending:[],next:1},links:{},pos:{},peer:null,bc:null,pairs:[]};
+function mpHost(){netCleanup();MP={role:'host',me:0,H:{code:null,codeErr:null,game:'dials',fuse:15,bots:0,pure:0,floor:'glass',mode:'vs',topics:'week',dials:8,lvl:2,phase:'lobby',players:[mkP(0,myName(),cleanEq(S.eq),NCOLS[0],true)],pending:[],next:1},links:{},pos:{},peer:null,bc:null,pairs:[]};
  go('mpLobby');lobbyEnter();hostOpenRoom();MP.posT=setInterval(hostPosTick,120);}
 function hostOpenRoom(){if(NTEST){const c=newCode();MP.bc=bcHost(c,hostConn);setCode(c);return;}
  const H=MP.H;const to=setTimeout(()=>{if(MP&&MP.H===H&&!H.code)setCode(null,'broker');},12000);
@@ -2089,10 +2107,12 @@ function hostAct(id,m){const H=MP.H,P=H.players.find(p=>p.id===id);if(!P)return;
  else if(t==='dial'&&H.phase==='play'&&!P.fin&&P.done<H.dials){P.done++;P.score+=[0,50,100].includes(m.pts)?m.pts:0;hostBoard();}
  else if(t==='vault'&&H.phase==='play'){const k=+m.k;if(k>=1&&k<=MP.nv)hostBcast({t:'toast',id,m:`🔓 ${P.name} cracked vault ${k}!`},true);}
  else if(t==='fin'&&H.phase==='play'&&!P.fin){P.fin=true;P.time=Math.max(0,Math.min(36e5,+m.time||0));hostBoard();hostCheckDone();}
+ else if(t==='ast')hostArenaState(id,m);
+ else if(t==='aans')hostArenaAns(id,m);
  else if(t==='bye')hostDrop(id,true);}
 function hostDrop(id,bye){if(!MP||MP.role!=='host')return;const H=MP.H;const l=MP.links[id];
  H.pending=H.pending.filter(p=>p.id!==id);const P=H.players.find(p=>p.id===id);
- if(P&&!P.host){if(H.phase==='lobby')H.players=H.players.filter(p=>p!==P);else P.left=true;delete MP.links[id];if(l)l.close();fb(`${esc(P.name)} left the room`,1800);hostSync();hostBoard();hostCheckDone();}else renderLobby();}
+ if(P&&!P.host){if(H.phase==='lobby')H.players=H.players.filter(p=>p!==P);else{P.left=true;arenaDrop(id);}delete MP.links[id];if(l)l.close();fb(`${esc(P.name)} left the room`,1800);hostSync();hostBoard();hostCheckDone();}else renderLobby();}
 function hostApprove(id){const H=MP.H,i=H.pending.findIndex(p=>p.id===id);if(i<0)return;const q=H.pending.splice(i,1)[0];
  if(H.phase!=='lobby'||H.players.length>=NMAX){q.w.send({t:'deny',why:H.phase!=='lobby'?'locked':'full'});setTimeout(()=>q.w.close(),400);renderLobby();return;}
  const used=H.players.map(p=>p.col),col=NCOLS.find(c=>!used.includes(c))||NCOLS[0];
@@ -2101,7 +2121,7 @@ function hostApprove(id){const H=MP.H,i=H.pending.findIndex(p=>p.id===id);if(i<0
 function hostDeny(id){const H=MP.H,i=H.pending.findIndex(p=>p.id===id);if(i<0)return;const q=H.pending.splice(i,1)[0];q.w.send({t:'deny',why:'host'});setTimeout(()=>q.w.close(),400);renderLobby();}
 function hostKick(id){const H=MP.H,P=H.players.find(p=>p.id===id);if(!P||P.host)return;const l=MP.links[id];if(l){l.send({t:'kick'});setTimeout(()=>l.close(),300);}delete MP.links[id];
  H.players=H.players.filter(p=>p!==P);fb(`Removed ${esc(P.name)}`,1600);hostSync();}
-function pubState(){const H=MP.H;return {code:H.code,codeErr:H.codeErr,mode:H.mode,topics:H.topics,dials:H.dials,lvl:H.lvl,phase:H.phase,
+function pubState(){const H=MP.H;return {code:H.code,codeErr:H.codeErr,game:H.game,fuse:H.fuse,bots:H.bots,pure:H.pure,floor:H.floor,mode:H.mode,topics:H.topics,dials:H.dials,lvl:H.lvl,phase:H.phase,
  players:H.players.map(p=>({id:p.id,name:p.name,col:p.col,eq:p.eq,team:p.team,ready:p.ready,host:p.host,left:p.left,x:+p.x.toFixed(3),y:+p.y.toFixed(3)}))};}
 function hostBcast(o,self){Object.values(MP.links).forEach(l=>l.send(o));if(self)guestLike(o);}
 function guestLike(o){if(o.t==='toast'&&o.id!==0)fb(esc(o.m),2200,'#0f5141');}
@@ -2112,12 +2132,12 @@ function hostPosTick(){if(!MP||MP.role!=='host'||!MP.posDirty||MP.H.phase!=='lob
  MP.H.players.forEach(p=>{if(p.id!==0)MP.pos[p.id]=[p.x,p.y];});if(cur==='mpLobby')placeAvs();}
 function canStart(){const H=MP.H,ps=H.players;if(ps.length<2)return 'Need at least 2 agents. Share the code on the board.';
  const nr=ps.filter(p=>!p.ready).map(p=>esc(p.name));if(nr.length)return 'Waiting for '+nr.join(', ')+' to tap Ready';
- if(H.mode==='team'&&(!ps.some(p=>p.team==='red')||!ps.some(p=>p.team==='blue')))return 'Each team needs at least 1 agent';
+ if(H.game!=='arena'&&H.mode==='team'&&(!ps.some(p=>p.team==='red')||!ps.some(p=>p.team==='blue')))return 'Each team needs at least 1 agent';
  if(H.pending.length)return 'Someone is at the door: let them in or say no first';return '';}
 function buildNetQs(){const H=MP.H;const tp=H.topics==='mix'?TOPICS.map(t=>t.id):(S.set.topics.length?S.set.topics:['mult','div','dec','frac']);
  const n=H.dials,per=n===5?5:4,qs=[];let ord=shuffle(tp);for(let i=0;i<n;i++){if(i&&i%ord.length===0)ord=shuffle(tp);qs.push(JSON.parse(JSON.stringify(fresh(ord[i%ord.length],H.lvl))));}
  const out=[];for(let i=0;i<n;i+=per)out.push(qs.slice(i,i+per));return out;}
-function hostStart(){if(canStart())return;const H=MP.H;H.phase='count';
+function hostStart(){if(canStart())return;const H=MP.H;if(H.game==='arena'){hostArenaStart();return;}H.phase='count';
  H.pending.forEach(q=>{q.w.send({t:'deny',why:'locked'});setTimeout(()=>q.w.close(),400);});H.pending=[];
  H.players.forEach(p=>Object.assign(p,{score:0,done:0,fin:false,time:0}));
  const qs=buildNetQs(),cfg={mode:H.mode,dials:H.dials,lvl:H.lvl};hostSync();
@@ -2133,7 +2153,7 @@ function hostBackLobby(){const H=MP.H;H.phase='lobby';H.players=H.players.filter
 function act(m){if(!MP)return;if(MP.role==='host')hostAct(0,m);else if(MP.w)MP.w.send(m);}
 function netSt(){return MP?(MP.role==='host'?pubState():MP.st):null;}
 function meP(){const s=netSt();return s&&s.players.find(p=>p.id===MP.me);}
-function netCleanup(){if(!MP)return;const M=MP;MP=null;cancelAnimationFrame(lRAF);clearInterval(M.posT);clearTimeout(M.endT);
+function netCleanup(){window.NETA=null;if(!MP)return;const M=MP;MP=null;cancelAnimationFrame(lRAF);clearInterval(M.posT);clearTimeout(M.endT);
  if(M.role==='host'){Object.values(M.links||{}).forEach(l=>{l.send({t:'closed'});setTimeout(()=>l.close(),300);});(M.H.pending||[]).forEach(q=>{q.w.send({t:'deny',why:'host'});setTimeout(()=>q.w.close(),300);});
   setTimeout(()=>{try{M.peer&&M.peer.destroy();}catch(e){}try{M.bc&&M.bc.close();}catch(e){}},500);(M.pairs||[]).forEach(p=>{try{p.pc.close();}catch(e){}});}
  else if(M.w){M.gone=true;M.w.send({t:'bye'});setTimeout(()=>{M.w.close();try{M.w.peer&&M.w.peer.destroy();}catch(e){}},200);}
@@ -2158,7 +2178,7 @@ function lobbyLoop(now){if(!MP||cur!=='mpLobby')return;const dt=Math.min(.05,(no
  m.x=Math.min(.97,Math.max(.03,m.x));m.y=Math.min(.95,Math.max(.05,m.y));
  if(m.moving&&now-lSent>110){lSent=now;act({t:'pos',x:+m.x.toFixed(3),y:+m.y.toFixed(3)});}
  placeAvs();lRAF=requestAnimationFrame(lobbyLoop);}
-function padCheck(){const s=netSt(),p=meP();if(!s||!p)return;act({t:'pos',x:+MP.my.x.toFixed(3),y:+MP.my.y.toFixed(3)});if(s.mode!=='team')return;const x=MP.my.x;const t=x<.31?'red':x>.69?'blue':null;if(t&&t!==p.team){act({t:'team',v:t});SFX.coin();}}
+function padCheck(){const s=netSt(),p=meP();if(!s||!p)return;act({t:'pos',x:+MP.my.x.toFixed(3),y:+MP.my.y.toFixed(3)});if(s.mode!=='team'||s.game==='arena')return;const x=MP.my.x;const t=x<.31?'red':x>.69?'blue':null;if(t&&t!==p.team){act({t:'team',v:t});SFX.coin();}}
 $('#lfloor').addEventListener('pointerdown',e=>{if(!MP||!MP.my)return;const r=$('#lfloor').getBoundingClientRect();MP.my.tx=Math.min(.97,Math.max(.03,(e.clientX-r.left)/r.width));MP.my.ty=Math.min(.95,Math.max(.12,(e.clientY-r.top)/r.height));});
 function placeAvs(){const s=netSt();if(!s)return;const box=$('#lavs');
  s.players.forEach(p=>{let el=box.querySelector(`[data-pid="${p.id}"]`);
@@ -2172,14 +2192,15 @@ function renderLobby(){if(!MP||cur!=='mpLobby')return;const s=netSt();if(!s)retu
  const c=s.code;$('#lcode').innerHTML=c?[...c].map((d,i)=>`<span class="${i===3?'gap':''}">${d}</span>`).join(''):s.codeErr?`<em>No code on this WiFi</em>`:`<em>making a code…</em>`;
  $('#lboardHint').innerHTML=c?'Open Vault Crack → 📡 Play Together → 🔑 Join':s.codeErr?'Host: tap 📷 Pair with QR to bring agents in':'Connecting to the room service…';
  $('#lboard').classList.toggle('err',!c&&!!s.codeErr);
- $('#lroom').classList.toggle('teams',s.mode==='team');
+ $('#lroom').classList.toggle('teams',s.mode==='team'&&s.game!=='arena');
  $('#mpRole').textContent=host?'👑 You are the host':'🕵️ Waiting room';$('#mpQrHost').hidden=!host;
  $('#mpCount').textContent=`(${s.players.length} of ${NMAX})`;
  $('#mpPending').innerHTML=host?H.pending.map(q=>`<div class="mpknock blk"><div class="mpkav">${avatarSVG(q.eq)}</div><div class="mpkt">🚪 <b>${esc(q.name)}</b> wants to join</div><button class="btn g" data-ok="${q.id}">✔ Let in</button><button class="btn r" data-no="${q.id}">✖ Not now</button></div>`).join(''):'';
  $('#mpRoster').innerHTML=s.players.map(p=>`<div class="mprow${p.id===MP.me?' me':''}"><i class="dot" style="background:${p.col}"></i><span class="mav">${avatarSVG(p.eq)}</span><span class="nm">${esc(p.name)}${p.id===MP.me?' <small>(you)</small>':''}</span>${s.mode==='team'?`<span class="tchip ${p.team}">${p.team==='red'?'Red':'Blue'}</span>`:''}<span class="rd">${p.host?'👑':p.ready?'✔':'⏳'}</span>${host&&!p.host?`<button class="kick" data-kick="${p.id}" aria-label="Remove ${esc(p.name)}">✖</button>`:''}</div>`).join('');
  const on=(id,v)=>$$(id+' button').forEach(b=>{b.classList.toggle('on',b.dataset.v===String(v));b.disabled=!host;});
- on('#mpMode',s.mode);on('#mpTopics',s.topics);on('#mpDials',s.dials);on('#mpLvl',s.lvl);$('#mpSet').classList.toggle('ro',!host);
- $('#mpTeamBtns').hidden=s.mode!=='team';const me=meP();$$('#mpTeamBtns button').forEach(b=>b.classList.toggle('on',!!me&&me.team===b.dataset.team));
+ on('#mpGame',s.game);on('#mpMode',s.mode);on('#mpTopics',s.topics);on('#mpTopics2',s.topics);on('#mpDials',s.dials);on('#mpLvl',s.lvl);on('#mpFuse',s.fuse);on('#mpBots',s.bots);on('#mpPure',s.pure);on('#mpFloor',s.floor);$('#mpSet').classList.toggle('ro',!host);
+ const ar=s.game==='arena';$('#mpDialSet').hidden=ar;$('#mpArenaSet').hidden=!ar;if(host)$$('#mpBots button').forEach(b=>{b.disabled=+b.dataset.v>NMAX-s.players.length;});$('#lroom').classList.toggle('arena',ar);$('#lring b').textContent=ar?'🏟️ ARENA DOOR':'⚔️ VS ZONE';
+ $('#mpTeamBtns').hidden=s.mode!=='team'||s.game==='arena';const me=meP();$$('#mpTeamBtns button').forEach(b=>b.classList.toggle('on',!!me&&me.team===b.dataset.team));
  $('#mpReady').hidden=host;$('#mpStart').hidden=!host;
  if(!host&&me){$('#mpReady').textContent=me.ready?'✔ Ready! (tap to undo)':'✋ I’m ready';$('#mpReady').classList.toggle('on',me.ready);}
  const why=host?canStart():(me&&me.ready?'Waiting for the host to start…':'Tap Ready when you are set. The host picks the mode.');
@@ -2187,7 +2208,7 @@ function renderLobby(){if(!MP||cur!=='mpLobby')return;const s=netSt();if(!s)retu
 $('#mpPending').addEventListener('click',e=>{const a=e.target.closest('[data-ok]'),b=e.target.closest('[data-no]');if(a)hostApprove(+a.dataset.ok);if(b)hostDeny(+b.dataset.no);});
 $('#mpRoster').addEventListener('click',e=>{const k=e.target.closest('[data-kick]');if(!k||!MP||MP.role!=='host')return;const id=+k.dataset.kick,P=MP.H.players.find(p=>p.id===id);if(!P)return;
  ov(`<h2>Remove ${esc(P.name)}?</h2><div class="mut" style="font-weight:700">They leave the room. They could knock again with the code, and you choose again.</div><div class="row"><button class="btn d" id="kNo" data-def>Keep</button><button class="btn r" id="kYes">Remove</button></div>`);$('#kNo').onclick=ovClose;$('#kYes').onclick=()=>{ovClose();hostKick(id);};});
-[['#mpMode','mode',0],['#mpTopics','topics',0],['#mpDials','dials',1],['#mpLvl','lvl',1]].forEach(([id,k,num])=>$(id).addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b||!MP||MP.role!=='host'||MP.H.phase!=='lobby')return;SFX.key();MP.H[k]=num?+b.dataset.v:b.dataset.v;hostSync();}));
+[['#mpGame','game',0],['#mpMode','mode',0],['#mpTopics','topics',0],['#mpTopics2','topics',0],['#mpDials','dials',1],['#mpLvl','lvl',1],['#mpFuse','fuse',1],['#mpBots','bots',1],['#mpPure','pure',1],['#mpFloor','floor',0]].forEach(([id,k,num])=>$(id).addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b||!MP||MP.role!=='host'||MP.H.phase!=='lobby')return;if(b.disabled)return;SFX.key();MP.H[k]=num?+b.dataset.v:b.dataset.v;hostSync();}));
 $('#mpTeamBtns').addEventListener('click',e=>{const b=e.target.closest('[data-team]');if(!b||!MP)return;const t=b.dataset.team;act({t:'team',v:t});MP.my.tx=t==='red'?.17:.83;MP.my.ty=.45+Math.random()*.3;SFX.key();});
 $('#mpReady').onclick=()=>{const p=meP();if(p){SFX.key();act({t:'ready',v:!p.ready});}};
 $('#mpStart').onclick=()=>{if(MP&&MP.role==='host'){SFX.key();hostStart();}};
@@ -2234,9 +2255,11 @@ function netFinish(){if(!MP){go('mp');return;}act({t:'fin',time:Math.round(G.act
 function netHud(){if(!MP||!G||G.mode!=='net')return;const s=netSt();if(!s)return;const l2=$('#race .l2');let box=$('#netToks');if(!box){box=document.createElement('div');box.id='netToks';l2.appendChild(box);}
  const B=MP.board||[],tot=s.dials;box.innerHTML=s.players.filter(p=>p.id!==MP.me).map(p=>{const b=B.find(x=>x.id===p.id)||{done:0};return `<i class="tok ntok" style="left:${b.done/tot*100}%;background:${p.col}" title="${esc(p.name)}">${esc(p.name[0]||'')}</i>`;}).join('');
  $('#raceLbl').textContent='';}
-function showEnd(){ovClose();if(G&&cur==='game'){G.lock=false;stopGameTimers();}go('mpEnd');renderEnd();if(MP&&MP.res){SFX.win();confetti();}}
+function showEnd(){ovClose();if(G&&cur==='game'){G.lock=false;stopGameTimers();}const wasA=!!window.NETA;window.NETA=null;go('mpEnd');
+ if(MP&&MP.res&&MP.res.kind==='arena'&&wasA){const me=MP.res.rank.find(r=>r.id===MP.me);if(me){const c=me.score*10+me.math*5+(me.win?40:0);S.coins+=c;save();refreshCoins();MP.res.myCoins=c;}}
+ renderEnd();if(MP&&MP.res){SFX.win();confetti();}}
 function fmtS(ms){return ms?fmtT(ms):'—';}
-function renderEnd(){if(!MP)return;const s=netSt();if(!s)return;const R=MP.res,host=MP.role==='host';let rank,teams=null,mode=s.mode,tot=s.dials;
+function renderEnd(){if(!MP)return;const s=netSt();if(!s)return;const R=MP.res,host=MP.role==='host';if(R&&R.kind==='arena'){renderArenaEnd(R,host);return;}let rank,teams=null,mode=s.mode,tot=s.dials;
  if(R){rank=R.rank;teams=R.teams;mode=R.mode;tot=R.total;}else{const B=MP.board||[];rank=s.players.map(p=>Object.assign({},p,B.find(b=>b.id===p.id)||{score:0,done:0,fin:false,time:0})).sort((a,b)=>b.score-a.score||(b.fin-a.fin)||(a.time-b.time));}
  const fins=rank.filter(p=>p.fin).length,act=rank.filter(p=>!p.left).length;
  if(R){if(mode==='team'){const r=teams.red.avg,b=teams.blue.avg;$('#mpEndT').innerHTML=r===b?'TEAMS TIE!':r>b?'<span style="color:#ff6b6b">RED TEAM WINS!</span>':'<span style="color:#54a0ff">BLUE TEAM WINS!</span>';}
@@ -2253,6 +2276,76 @@ function renderEnd(){if(!MP)return;const s=netSt();if(!s)return;const R=MP.res,h
 
 const _aos=window.arenaOnScreen;window.arenaOnScreen=id=>{_aos&&_aos(id);if(id==='mp')renderMpStart();if(id!=='mpLobby')cancelAnimationFrame(lRAF);if(id!=='mpPair')camStop('mpCam1');
  if(id==='home'&&MP)netCleanup();};
+
+/* ---- Arena together: host runs the round (holder, timer, passes, power-ups, outs); each tablet moves its own agent ---- */
+const PHYSEV=new Set(['jump','wallhop','trusshop','trussboost','grab']);
+const r3=v=>Math.round(v*1000)/1000,r2=v=>Math.round(v*100)/100;
+function netTopics(){return MP.H.topics==='mix'?TOPICS.map(t=>t.id):(S.set.topics.length?S.set.topics:['mult','div','dec','frac']);}
+function hostArenaStart(){const H=MP.H;H.phase='play';
+ H.pending.forEach(q=>{q.w.send({t:'deny',why:'locked'});setTimeout(()=>q.w.close(),400);});H.pending=[];
+ const P=[],map={};H.players.forEach((h,i)=>{const p=newPlayer(i,h.name,h.col,true,{skin:ITEM[h.eq.skin].col,suit:ITEM[h.eq.suit].col,head:h.eq.head});p.remote=h.id!==0;p.rid=h.id;P.push(p);map[h.id]=i;});
+ const nb=Math.min(H.bots,NMAX-P.length);for(let i=0;i<nb;i++)P.push(newPlayer(P.length,BOTN[i],PCOL[(P.length+1)%PCOL.length],false));
+ const qt=netTopics();
+ AS={v:2,map:'double-decker',mode:'party',target:0,pure:!!H.pure,floor:H.floor,t:0,phase:'count',phaseT:3,round:1,holder:-1,fuse:H.fuse,fuseLen:H.fuse,graceFrom:-1,graceT:0,timeUsed:{},players:P,skill:1,events:[],winner:-1,wins:{},lastOut:-1,mq:{},qt,net:1};
+ P.forEach(p=>AS.wins[p.id]=0);P.filter(p=>p.human).forEach(p=>{AS.mq[p.id]={q:quickQ(qt),cool:0,alt:pick(['shield','speed'])};});
+ spawnAll();window.NETA={guest:false,pid:0,map,rb:{},evq:[],lastSnap:0};
+ hostSync();hostBcast({t:'astart',AS:JSON.parse(JSON.stringify(AS)),map});arenaViews([0]);}
+function guestArenaStart(m){if(!MP||MP.me==null)return;const pid=m.map[MP.me];if(pid==null)return;AS=m.AS;AS.events=[];
+ window.NETA={guest:true,pid,map:m.map,rb:{},sp:AS.sp,lastSend:0,stripK:''};ovClose();arenaViews([pid]);}
+function arenaSnap(){return {ph:AS.phase,pt:r2(AS.phaseT),rd:AS.round,ho:AS.holder,fu:r2(AS.fuse),gf:AS.graceFrom,gt:r2(AS.graceT),tu:AS.timeUsed,wi:AS.winner,ws:AS.wins,lo:AS.lastOut,sp:AS.sp,t:r2(AS.t),mq:AS.mq,
+ P:AS.players.map(p=>[p.id,r3(p.x),r3(p.y),r3(p.z),r3(p.yaw),r2(p.anim),r2(p.vx),r2(p.vz),p.ground?1:0,p.climb?1:0,p.out?1:0,r2(p.outT),r2(p.speedT),r2(p.shieldT),r2(p.boostT),p.score,p.mathOK])};}
+function netHostTick(now){if(!MP||!window.NETA)return;if(AS.events.length)NETA.evq.push(...AS.events.map(e=>Object.assign({},e)));
+ if(now-NETA.lastSnap<50)return;NETA.lastSnap=now;const m={t:'asnap',s:arenaSnap(),ev:NETA.evq};NETA.evq=[];hostBcast(m);}
+function rbPush(id,now,o){const b=NETA.rb[id]||(NETA.rb[id]=[]);o.t=now;b.push(o);while(b.length>12||(b.length>2&&now-b[0].t>1200))b.shift();}
+function netApplySnap(m){const s=m.s,now=performance.now();
+ Object.assign(AS,{phase:s.ph,phaseT:s.pt,round:s.rd,holder:s.ho,fuse:s.fu,graceFrom:s.gf,graceT:s.gt,timeUsed:s.tu,winner:s.wi,wins:s.ws,lastOut:s.lo,mq:s.mq,t:s.t});
+ const tele=s.sp!==NETA.sp;NETA.sp=s.sp;
+ s.P.forEach(a=>{const [id,x,y,z,yaw,anim,vx,vz,gr,cl,out,outT,spT,shT,bT,sc,mo]=a;const p=AS.players[id];if(!p)return;
+  const wasOut=p.out;p.out=!!out;p.speedT=spT;p.shieldT=shT;p.score=sc;p.mathOK=mo;
+  if(id===NETA.pid){if(tele){Object.assign(p,{x,y,z,yaw,vx:0,vy:0,vz:0,climb:false});AV[0].cy=Math.atan2(-x,-z);}if(out&&!wasOut){p.outT=0;p.vx=p.vy=p.vz=0;p.climb=false;}}
+  else{p.outT=outT;p.boostT=bT;p.ground=!!gr;p.climb=!!cl;p.vx=vx;p.vz=vz;if(tele)NETA.rb[id]=[];rbPush(id,now,{x,y,z,yaw,anim});Object.assign(p,{x,y,z,yaw,anim});}});
+ (m.ev||[]).forEach(e=>{if(e.id===NETA.pid&&PHYSEV.has(e.e))return;AS.events.push(e);});
+ const mq=AS.mq[NETA.pid];if(mq&&AV[0]){const k=mq.q.p+'|'+(mq.cool>0)+'|'+rewFor(NETA.pid)+'|'+AS.players[NETA.pid].out;if(k!==NETA.stripK){NETA.stripK=k;renderStrip(AV[0]);}}}
+function netGuestStep(dt){const step=1/60,me=AS.players[NETA.pid];if(!me)return;aAcc+=dt;let n=0;
+ while(aAcc>=step&&n<6){const inp=gatherInput(AV[0],step);
+  if(AS.phase==='play'||AS.phase==='poof')simPlayer(me,inp,step);else if(AS.phase==='count')simPlayer(me,{cy:me.yaw},step);
+  if(AS.phase==='play')AS.fuse=Math.max(0,AS.fuse-step);else if(AS.phase!=='over')AS.phaseT-=step;AS.t+=step;aAcc-=step;n++;}
+ const now=performance.now();if(MP&&MP.w&&now-NETA.lastSend>50){NETA.lastSend=now;
+  MP.w.send({t:'ast',sp:NETA.sp,s:[r3(me.x),r3(me.y),r3(me.z),r2(me.vx),r2(me.vy),r2(me.vz),r3(me.yaw),r2(me.anim),me.ground?1:0,me.climb?1:0,me.lock?1:0,r2(me.boostT)]});}}
+function hostArenaState(rid,m){if(!window.NETA||NETA.guest||!AS)return;const idx=NETA.map[rid],p=AS.players[idx];if(!p||m.sp!==AS.sp||!Array.isArray(m.s))return;
+ const v=m.s.map(Number);if(v.some(x=>!isFinite(x)))return;const [x,y,z,vx,vy,vz,yaw,anim,gr,cl,lk,bT]=v;
+ Object.assign(p,{x:Math.max(-ARENA.W,Math.min(ARENA.W,x)),y:Math.max(-1,Math.min(ARENA.H,y)),z:Math.max(-ARENA.D,Math.min(ARENA.D,z)),vx,vy,vz,yaw,anim,ground:!!gr,climb:!!cl,lock:!!lk,boostT:Math.min(2,Math.max(0,bT))});
+ rbPush(idx,performance.now(),{x:p.x,y:p.y,z:p.z,yaw,anim});}
+function hostArenaAns(rid,m){if(!window.NETA||NETA.guest||!AS)return;const pid=NETA.map[rid],mq=AS.mq[pid],p=AS.players[pid],i=+m.i;
+ if(AS.pure||!mq||!p||mq.cool>0||p.out||AS.phase==='over'||m.p!==mq.q.p)return;
+ if(i===mq.q.a){grantBoost(p,rewFor(pid));p.mathOK++;mq.q=quickQ(AS.qt);mq.alt=mq.alt==='shield'?'speed':'shield';mq.cool=1.2;setTimeout(()=>{mq.cool=0;},1200);}
+ else{mq.cool=1.6;AS.events.push({e:'oops',id:pid});setTimeout(()=>{if(AS&&AS.mq[pid]===mq){mq.q=quickQ(AS.qt);mq.cool=0;}},1600);}}
+function netArenaAns(i){const mq=AS.mq[NETA.pid];if(!mq||!MP||!MP.w)return;MP.w.send({t:'aans',i,p:mq.q.p});mq.cool=1;renderStrip(AV[0]);NETA.stripK='';}
+function netInterp(now,apply){if(!window.NETA)return;
+ if(apply){NETA.saved=[];const rt=now-110;for(const id in NETA.rb){const p=AS.players[id],b=NETA.rb[id];if(!p||+id===NETA.pid||!b.length)continue;let a=b[0],c=b[b.length-1],q;
+   if(rt<=a.t)q=a;else if(rt>=c.t)q=c;else{for(let i=0;i<b.length-1;i++)if(b[i].t<=rt&&b[i+1].t>=rt){a=b[i];c=b[i+1];break;}const k=(rt-a.t)/((c.t-a.t)||1);let dy=c.yaw-a.yaw;dy=Math.atan2(Math.sin(dy),Math.cos(dy));
+    q={x:a.x+(c.x-a.x)*k,y:a.y+(c.y-a.y)*k,z:a.z+(c.z-a.z)*k,yaw:a.yaw+dy*k,anim:a.anim+(c.anim-a.anim)*k};}
+   NETA.saved.push([p,p.x,p.y,p.z,p.yaw,p.anim]);Object.assign(p,{x:q.x,y:q.y,z:q.z,yaw:q.yaw,anim:q.anim});}}
+ else{(NETA.saved||[]).forEach(([p,x,y,z,yaw,anim])=>Object.assign(p,{x,y,z,yaw,anim}));NETA.saved=null;}}
+function arenaDrop(rid){if(!window.NETA||NETA.guest||!AS)return;const idx=NETA.map[rid],p=AS.players[idx];if(!p||p.out)return;
+ p.out=true;p.outT=0;p.left=true;p.vx=p.vy=p.vz=0;delete NETA.rb[idx];const al=alive();
+ if(AS.phase==='play'&&AS.holder===idx&&al.length)AS.holder=pick(al).id;
+ if((AS.phase==='play'||AS.phase==='count')&&al.length<=1){AS.phase='over';AS.winner=al.length?al[0].id:-1;AS.events.push({e:'over',id:AS.winner});}}
+function netArenaOverSoon(){if(!window.NETA||NETA.guest)return;clearTimeout(NETA.endT);NETA.endT=setTimeout(hostArenaEnd,1700);}
+function hostArenaEnd(){if(!MP||MP.role!=='host'||!AS||MP.H.phase!=='play')return;const H=MP.H;
+ const rk=AS.players.slice().sort((a,b)=>(b.id===AS.winner)-(a.id===AS.winner)||b.score-a.score||b.mathOK-a.mathOK);
+ const R={kind:'arena',rounds:AS.round,pure:AS.pure,rank:rk.map(p=>{const h=p.rid!=null?H.players.find(x=>x.id===p.rid):null;return {id:h?h.id:'bot'+p.id,name:p.name,col:p.col,eq:h?h.eq:Object.assign({},DEF.eq,{eyes:'eyes_none',gear:'gear_none'}),bot:!p.human,score:p.score,math:p.mathOK,win:p.id===AS.winner,left:!!p.left};})};
+ H.phase='end';MP.res=R;hostSync();hostBcast({t:'end',R});showEnd();}
+function netArenaQuit(){ov(`<h2>Leave the arena game?</h2><div class="mut" style="font-weight:700">${MP&&MP.role==='host'?'You are the host, so the room closes for everyone.':'You can’t come back into this round.'}</div><div class="row"><button class="btn g" id="aStay" data-def>Keep playing</button><button class="btn r" id="aLeave">Leave</button></div>`);
+ $('#aStay').onclick=ovClose;$('#aLeave').onclick=()=>{ovClose();netCleanup();AS=null;go('mp');};}
+function renderArenaEnd(R,host){const w=R.rank.find(p=>p.win);
+ $('#mpEndT').innerHTML=w?`<span style="color:${w.col}">${esc(w.name)}</span> WINS! 🏆`:'GAME OVER';
+ $('#mpEndSub').textContent=`Last agent standing on Double Decker · ${R.rounds} round${R.rounds===1?'':'s'}`+(R.myCoins!=null?` · you earned ${R.myCoins} coins`:'');
+ const top=R.rank.slice(0,3),ord=[1,0,2].filter(i=>top[i]);
+ $('#mpPod').innerHTML=ord.map(i=>{const p=top[i];return `<div class="pod p${i+1}"><div class="pav">${avatarSVG(p.eq)}</div><div class="pnm" style="color:${p.col}">${esc(p.name)}</div><div class="pblk"><b>${['🥇','🥈','🥉'][i]}</b><span>${p.win?'🏆':p.score}</span></div></div>`;}).join('');
+ $('#mpTeamRes').innerHTML='';
+ $('#mpBoard').innerHTML=R.rank.map((p,i)=>`<div class="mprow lb${p.id===MP.me?' me':''}${p.left?' left':''}"><b class="pl">${i+1}</b><i class="dot" style="background:${p.col}"></i><span class="nm">${esc(p.name)}${p.bot?' <small>(bot)</small>':''}${p.left?' <small>(left)</small>':''}</span><span class="dn">${p.win?'🏆 last one standing':`survived ${p.score} round${p.score===1?'':'s'}`}${R.pure?'':` · ${p.math} power-up${p.math===1?'':'s'}`}</span></div>`).join('');
+ $('#mpBoardLbl').textContent='Arena results';$('#mpBackLobby').hidden=!host;$('#mpEndNow').hidden=true;$('#mpEndLeave').textContent=host?'🏠 Close room':'🏠 Leave room';}
 
 </script>
 </body></html>

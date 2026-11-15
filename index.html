@@ -548,6 +548,54 @@ img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none}
 .alabel.me{opacity:.85;transform:translate(-50%,-100%) scale(.85)}
 body[data-scr="arena"] .fb{bottom:auto!important;top:62px!important;font-size:16px;padding:8px 14px;transform:translateX(-50%) translateY(-200%)}
 body[data-scr="arena"] .fb.on{transform:translateX(-50%) translateY(0)}
+
+/* Double Decker remake: Roblox-style HUD (top-centre mode + timer, bottom-centre Leave + held item) */
+.amode{font-weight:900;font-size:13px;letter-spacing:1px;color:#fff;background:#1e1e1ecc;border-radius:999px;padding:3px 14px;text-transform:uppercase;text-shadow:0 1px 0 #000}
+.afuse{background:#1e1e1ed9!important;border-radius:14px!important}
+.abar{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);display:flex;align-items:flex-end;gap:10px;z-index:7}
+.abarleave{min-height:52px;padding:6px 18px;font-size:19px;background:#e84118;color:#fff;border-radius:12px}
+.aslots{display:flex;gap:8px}
+.aslot{position:relative;width:58px;height:58px;border-radius:10px;background:#1e1e1ecc;border:3px solid #ffffff55;display:flex;align-items:center;justify-content:center;font-size:26px}
+.aslot small{position:absolute;left:5px;top:2px;font-size:11px;font-weight:900;color:#fff;max-width:48px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.aslot.on{border-color:#feca57;box-shadow:0 0 14px #feca57aa}
+.aslot .gv{width:30px;height:30px}
+.aslot.out{opacity:.7}
+.astrip{bottom:76px}
+.aboosts{bottom:140px}
+.ajoy{bottom:76px}
+.abtns{bottom:76px}
+
+/* Double Decker remake: waiting room (gray studded tiles, white join pads, dark Open Arena board, arena preview behind) */
+.lroom{background:#6f767d}
+.lwall{height:44%;min-height:200px;background:#2a1a0f;border-bottom:8px solid #3a3f44;overflow:hidden}
+.lprev{position:absolute;inset:0;z-index:0;background:radial-gradient(#00000026 2px,transparent 3px) 0 0/18px 18px,linear-gradient(#f0c793,#e2b178)}
+.lprev i{position:absolute;display:block}
+.lprev .pc{left:0;right:0;top:0;height:12%;background:repeating-linear-gradient(90deg,#c06a2c 0 14px,transparent 14px 120px),#efc895;box-shadow:0 6px 18px #fff3d6}
+.lprev .pdk{left:-5%;right:-5%;top:40%;height:9%;background:repeating-linear-gradient(90deg,#d98c3a 0 46px,#b8692a 46px 49px);box-shadow:0 8px 0 #8a4a1c}
+.lprev .pfl{left:-10%;right:-10%;bottom:0;height:26%;background:repeating-linear-gradient(90deg,#e0913f 0 60px,#b9702c 60px 63px);transform:perspective(300px) rotateX(38deg);transform-origin:bottom}
+.lprev .ptw{left:calc(50% - 22px);width:44px;top:0;bottom:0;background:repeating-linear-gradient(45deg,transparent 0 9px,#7d8a96 9px 13px),repeating-linear-gradient(-45deg,transparent 0 9px,#7d8a96 9px 13px);border-left:5px solid #6b7783;border-right:5px solid #6b7783}
+.lprev .pp1,.lprev .pp2{width:9%;top:49%;bottom:12%;background:repeating-linear-gradient(90deg,#c4702c 0 12px,#a9581f 12px 14px);box-shadow:inset -8px 0 0 #0002}
+.lprev .pp1{left:14%}.lprev .pp2{right:14%}
+.lprev .pbk{left:30%;width:14%;bottom:6%;height:12%;background:#d4863a;box-shadow:inset 0 6px 0 #ffffff22,inset -8px 0 0 #0002}
+.lsign{position:absolute;left:10px;top:10px;z-index:2;background:#1e1e1ecc;color:#fff;border:0;border-radius:999px;font-size:12px}
+.lboard{background:#1b1d21f2;border:0;outline:0;border-radius:24px;padding:10px 30px 12px;box-shadow:0 10px 30px #0008,inset 0 0 0 3px #ffffff1a}
+.lboard .lbt{font-family:Impact,"Arial Black",system-ui,sans-serif;font-size:clamp(22px,2.6vw,34px);letter-spacing:2px;color:#fff;line-height:1.05}
+.lboard .lbl1{color:#9aa4ae;font-size:clamp(12px,1.2vw,15px);letter-spacing:4px}
+.lcode{color:#fff;text-shadow:0 3px 0 #000}
+.lwait{font-weight:900;font-size:clamp(15px,1.6vw,20px);color:#ffd36b;margin-top:2px}
+.lwait b{color:#fff}
+.lboard.err{box-shadow:0 10px 30px #0008,inset 0 0 0 3px var(--lav)}
+.lfloor{background:radial-gradient(circle at 50% 50%,#9aa1a8 0 7px,#7e858c 8px 9px,transparent 10px) 0 0/40px 40px,linear-gradient(#0000002a,#0000 25%),repeating-conic-gradient(#8c939a 0 25%,#858c93 0 50%) 0 0/80px 80px}
+.ljp{position:absolute;width:11%;aspect-ratio:1;background:#f5f6fa;border-radius:10px;box-shadow:0 0 0 4px #ffffff55,0 0 22px #ffffffaa,inset 0 -6px 0 #c8ccd2;pointer-events:none}
+.ljp.j1{left:8%;top:14%}.ljp.j2{right:8%;top:14%}.ljp.j3{left:8%;bottom:10%}.ljp.j4{right:8%;bottom:10%}
+.lring{border:5px solid #fff;background:#ffffff30;color:#fff;border-radius:16px;box-shadow:0 0 24px #ffffff88}
+.lpad.red{background:#ffffffd0;border:5px solid #ff6b6b;color:#c0392b}.lpad.blue{background:#ffffffd0;border:5px solid #54a0ff;color:#1e5fa8}
+.lhint{background:#1e1e1ecc;color:#fff}
+.lroom.teams .ljp{display:none}
+.mapart .deck{background:repeating-linear-gradient(90deg,#d98c3a 0 14px,#b8692a 14px 16px);border-color:#8a4a1c}
+.mapart .p1,.mapart .p2{background:repeating-linear-gradient(90deg,#c4702c 0 6px,#a9581f 6px 7px)}
+.mapart .ldg{background:#cf8540}
+.mapart::after{content:"";position:absolute;left:0;right:0;bottom:0;height:10%;background:repeating-linear-gradient(90deg,#e0913f 0 18px,#b9702c 18px 20px);border-top:3px solid #000}
 </style></head>
 <body>
 <section id="home" class="scr on">
@@ -663,7 +711,7 @@ body[data-scr="arena"] .fb.on{transform:translateX(-50%) translateY(0)}
  <div class="top"><button class="btn d sm" data-go="home">← Back</button><h2>🏟️ Glitch Vault Arena</h2><span class="sp"></span><span class="coins"><i class="cube"></i><span class="cv">0</span></span></div>
  <div class="asetup">
   <div class="sec blk amap"><div class="mapart" aria-hidden="true"><i class="ceil"></i><i class="deck"></i><i class="hole"></i><i class="truss"></i><i class="p1"></i><i class="p2"></i><i class="ldg"></i><i class="sgn"></i></div>
-   <h3>Map: Double Decker</h3><div class="mut" style="font-weight:700">A closed pegboard room with a big glass upper deck. Get up with the low ledges, the wall pegs or the steel truss in the middle (two quick jumps on it give you a burst). Drop through the opening to get back down. Bounce off the pegboard walls with a wall hop.</div>
+   <h3>Map: Double Decker</h3><div class="mut" style="font-weight:700">A warm wooden room with pegboard walls and a big upper deck ring. Get up with the low ledges, the wall pegs or the steel truss in the middle (two quick jumps on it give you a burst). Drop through the opening to get back down. Bounce off the pegboard walls with a wall hop.</div>
    <div class="exbox" style="font-size:16px">Somebody starts with the <b>Glitch Vault</b>. Bump into another player to pass it. The 10-second timer keeps counting and never resets! When it hits zero, <b>FIZZ-POOF!</b> whoever holds it is out and becomes a ghost. Last one standing wins. Answer quick math for small power-ups: 🛡 2-second shield, ⚡ speed spark, ⏱ +2 seconds (once a round, only while you have it).</div></div>
   <div class="sec blk">
    <div class="lbl">Game</div><div class="seg" id="aGame"><button data-v="party" class="on">🎉 Party</button><button data-v="duel">⚔️ Duel</button></div>
@@ -671,7 +719,7 @@ body[data-scr="arena"] .fb.on{transform:translateX(-50%) translateY(0)}
    <div id="aBotsRow"><div class="lbl">Bots</div><div class="seg" id="aBots"><button data-v="0">0</button><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div>
    <div id="aDuelRow" hidden><div class="lbl">First to</div><div class="seg" id="aTo"><button data-v="3" class="on">3</button><button data-v="5">5</button></div>
     <div class="lbl">Power-ups</div><div class="seg" id="aPure"><button data-v="0" class="on">🧮 Math power-ups</button><button data-v="1">✋ Pure (none)</button></div></div>
-   <div class="lbl">Upper floor</div><div class="seg" id="aFloor"><button data-v="glass" class="on">🪟 Glass</button><button data-v="classic">🪵 Classic floor</button></div>
+   <div class="lbl">Upper floor</div><div class="seg" id="aFloor"><button data-v="classic" class="on">🪵 Wood</button><button data-v="glass">🪟 Glass</button></div>
    <div class="lbl">Bot skill</div><div class="seg" id="aSkill"><button data-v="0">Chill</button><button data-v="1" class="on">Normal</button><button data-v="2">Pro</button></div>
    <div class="mut" style="font-size:15px;font-weight:900;margin:6px 0 0" id="aWho"></div>
    <div class="mut" style="font-size:14px;font-weight:700;margin:4px 0" id="aKeys"></div>
@@ -683,11 +731,11 @@ body[data-scr="arena"] .fb.on{transform:translateX(-50%) translateY(0)}
  <canvas id="acv"></canvas>
  <div id="alabels"></div>
  <div class="ahud">
-  <button class="btn d icon sm" id="aQuit" aria-label="Leave arena">✕</button>
-  <div class="amid"><div class="ascore blk" id="ascore" hidden></div><div class="afuse blk" id="afuse"><span class="gv"></span><b id="afuseT">10.0</b><span id="afuseWho"></span></div></div>
+  <div class="amid"><div class="amode" id="amode">Double Decker</div><div class="ascore blk" id="ascore" hidden></div><div class="afuse blk" id="afuse"><span class="gv"></span><b id="afuseT">10.0</b><span id="afuseWho"></span></div></div>
   <div class="aalive" id="aalive"></div>
  </div>
  <div id="aviews"></div>
+ <div class="abar"><button class="btn abarleave" id="aQuit" aria-label="Leave arena">🚪 Leave</button><div class="aslots" id="aslots"></div></div>
  <div class="acount" id="acount"></div>
  <div class="anogl" id="anogl" hidden>This device can’t run the 3D arena (WebGL is off). The vault game still works!</div>
 </section>
@@ -731,10 +779,10 @@ body[data-scr="arena"] .fb.on{transform:translateX(-50%) translateY(0)}
 <section id="mpLobby" class="scr">
  <div class="mplob">
   <div class="lroom blk" id="lroom">
-   <div class="lwall"><div class="lsign">AGENT HQ · WAITING ROOM</div>
-    <div class="lboard" id="lboard"><div class="lbl1">JOIN CODE</div><div class="lcode" id="lcode"></div><div class="lbl2" id="lboardHint">Open Vault Crack → 📡 Play Together → 🔑 Join</div></div>
-    <div class="lvault" aria-hidden="true"><i></i></div><div class="lplant" aria-hidden="true"></div></div>
-   <div class="lfloor" id="lfloor"><div class="lpad red" id="lpadRed"><b>RED TEAM</b><small>stand here</small></div><div class="lpad blue" id="lpadBlue"><b>BLUE TEAM</b><small>stand here</small></div><div class="lring" id="lring"><b>⚔️ VS ZONE</b></div><div class="lcrate c1"></div><div class="lcrate c2"></div><div id="lavs"></div><div class="lhint">Tap the floor to walk</div></div>
+   <div class="lwall"><div class="lprev" aria-hidden="true"><i class="pc"></i><i class="pdk"></i><i class="pfl"></i><i class="ptw"></i><i class="pp1"></i><i class="pp2"></i><i class="pbk"></i></div>
+    <div class="lsign">WAITING ROOM</div>
+    <div class="lboard" id="lboard"><div class="lbt">OPEN ARENA</div><div class="lbl1">JOIN CODE</div><div class="lcode" id="lcode"></div><div class="lwait" id="lwait"></div><div class="lbl2" id="lboardHint">Open Vault Crack → 📡 Play Together → 🔑 Join</div></div></div>
+   <div class="lfloor" id="lfloor"><div class="lpad red" id="lpadRed"><b>RED TEAM</b><small>stand here</small></div><div class="lpad blue" id="lpadBlue"><b>BLUE TEAM</b><small>stand here</small></div><div class="lring" id="lring"><b>⚔️ VS ZONE</b></div><div class="ljp j1"></div><div class="ljp j2"></div><div class="ljp j3"></div><div class="ljp j4"></div><div id="lavs"></div><div class="lhint">Tap the floor to walk</div></div>
    <div class="lcount" id="lcount"></div>
   </div>
   <div class="mpside">
@@ -751,7 +799,7 @@ body[data-scr="arena"] .fb.on{transform:translateX(-50%) translateY(0)}
      <div class="mprow2 a4"><div><div class="lbl">Timer (seconds)</div><div class="seg" id="mpFuse"><button data-v="10">10</button><button data-v="15">15</button><button data-v="20">20</button></div></div>
      <div><div class="lbl">Bots</div><div class="seg" id="mpBots"><button data-v="0">0</button><button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button></div></div>
      <div><div class="lbl">Power-ups</div><div class="seg" id="mpPure"><button data-v="0">🧮 Math</button><button data-v="1">✋ None</button></div></div>
-     <div><div class="lbl">Upper floor</div><div class="seg" id="mpFloor"><button data-v="glass">Glass</button><button data-v="classic">Classic</button></div></div></div>
+     <div><div class="lbl">Upper floor</div><div class="seg" id="mpFloor"><button data-v="classic">🪵 Wood</button><button data-v="glass">🪟 Glass</button></div></div></div>
      <div class="mut mpanote">Everyone for themselves: bump someone to pass the Glitch Vault. Last agent standing wins.</div></div>
    </div>
    <div class="mpteams" id="mpTeamBtns" hidden><button class="btn r" data-team="red">🔴 Join Red</button><button class="btn" data-team="blue">🔵 Join Blue</button></div>
@@ -1542,35 +1590,49 @@ const K=ARENA.DECK,HL=ARENA.HOLE;
 /* ---------- map geometry ---------- */
 const MAP=[]; // {a:[x,y,z],b:[x,y,z],c:'#hex',t:0 plain 1 pegboard 2 truss 3 floor, flags}
 const SIGN={a:[8.5,5.5,-ARENA.D+.05],b:[14.5,8.1,-ARENA.D+.45]};
-const LEDGES=[],PEGS=[];
+const LEDGES=[],PEGS=[],DECO=[],LIGHTS=[];
 (function buildMap(){const W=ARENA.W,D=ARENA.D,H=ARENA.H;
  const B=(a,b,c,t=0,o={})=>{const r=Object.assign({a,b,c,t},o);MAP.push(r);return r;};
- B([-W-1,-1,-D-1],[W+1,0,D+1],'#d19a62',3);
+ B([-W-1,-1,-D-1],[W+1,0,D+1],'#e0913f',5);
+ const Dc=(a,b,c,t=5)=>DECO.push({a,b,c,t});
  // closed pegboard room + ceiling (nobody can fall out)
- B([-W-1,0,-D-1],[-W,H,D+1],'#e3ad74',1,{wall:1});B([W,0,-D-1],[W+1,H,D+1],'#e3ad74',1,{wall:1});
- B([-W,0,-D-1],[W,H,-D],'#dba46b',1,{wall:1});B([-W,0,D],[W,H,D+1],'#dba46b',1,{wall:1});
- B([-W-1,H,-D-1],[W+1,H+1,D+1],'#e8b47e',1,{ceil:1});
+ B([-W-1,0,-D-1],[-W,H,D+1],'#e9bf8a',1,{wall:1});B([W,0,-D-1],[W+1,H,D+1],'#e9bf8a',1,{wall:1});
+ B([-W,0,-D-1],[W,H,-D],'#e4b780',1,{wall:1});B([-W,0,D],[W,H,D+1],'#e4b780',1,{wall:1});
+ B([-W-1,H,-D-1],[W+1,H+1,D+1],'#efc895',1,{ceil:1});
+ // warm wood trim: baseboards, a belt at deck height, ceiling beams + corner posts (looks only, no collision)
+ [[-W,-W+.25,-D,D],[W-.25,W,-D,D]].forEach(([x0,x1,z0,z1])=>{Dc([x0,0,z0],[x1,.55,z1],'#b8642a');Dc([x0,K.y0,z0],[x1,K.y1,z1],'#c9712f');});
+ [[-D,-D+.25],[D-.25,D]].forEach(([z0,z1])=>{Dc([-W,0,z0],[W,.55,z1],'#b8642a');Dc([-W,K.y0,z0],[W,K.y1,z1],'#c9712f');});
+ [-15,-10,-5,5,10,15].forEach(x=>Dc([x-.35,H-.75,-D],[x+.35,H,D],'#c06a2c'));
+ [-7,0,7].forEach(z=>Dc([-W,H-.5,z-.3],[W,H-.05,z+.3],'#b5602a'));
+ [[-W,-D],[W-.7,-D],[-W,D-.7],[W-.7,D-.7]].forEach(([x,z])=>Dc([x,0,z],[x+.7,H,z+.7],'#a9581f'));
+ // warm ceiling lights
+ [-12,0,12].forEach(x=>[-7,7].forEach(z=>LIGHTS.push([x,H-.12,z])));
  // wide thick upper deck with an opening around the central truss (4 slabs)
- const dk=(a,b)=>B(a,b,'#c48446',1,{deck:1});
+ const dk=(a,b)=>B(a,b,'#d98c3a',5,{deck:1});
  dk([K.x0,K.y0,K.z0],[K.x1,K.y1,-HL]);dk([K.x0,K.y0,HL],[K.x1,K.y1,K.z1]);
  dk([K.x0,K.y0,-HL],[-HL,K.y1,HL]);dk([HL,K.y0,-HL],[K.x1,K.y1,HL]);
  // wooden rims so the glass edges read clearly
- const rim=(a,b)=>B(a,b,'#9c6331',0,{rim:1});const ry=K.y1-.14,rt=K.y1+.02;
+ const rim=(a,b)=>B(a,b,'#8a4a1c',5,{rim:1});const ry=K.y1-.14,rt=K.y1+.02;
  rim([K.x0,ry,K.z0],[K.x1,rt,K.z0+.3]);rim([K.x0,ry,K.z1-.3],[K.x1,rt,K.z1]);rim([K.x0,ry,K.z0],[K.x0+.3,rt,K.z1]);rim([K.x1-.3,ry,K.z0],[K.x1,rt,K.z1]);
  rim([-HL,ry,-HL],[HL,rt,-HL+.25]);rim([-HL,ry,HL-.25],[HL,rt,HL]);rim([-HL,ry,-HL],[-HL+.25,rt,HL]);rim([HL-.25,ry,-HL],[HL,rt,HL]);
  // ONE steel truss, floor to ceiling, through the opening
  B([-.7,0,-.7],[.7,H,.7],'#8e9aa6',2,{truss:1});
  // big chunky sandy pillars holding up the deck
- [[-8,-3.7],[8,-3.7],[-8,3.7],[8,3.7]].forEach(([x,z])=>B([x-1.25,0,z-1.25],[x+1.25,K.y0,z+1.25],'#c9935a',1,{block:1}));
+ [[-8,-3.7],[8,-3.7],[-8,3.7],[8,3.7]].forEach(([x,z])=>B([x-1.25,0,z-1.25],[x+1.25,K.y0,z+1.25],'#c4702c',5,{block:1}));
+ // wooden beams under the deck ring (looks only)
+ [-3.7,3.7].forEach(z=>Dc([K.x0,K.y0-.45,z-.35],[K.x1,K.y0,z+.35],'#a9581f'));
  // big blocks on the ground floor (hop on them, run around them)
- B([-3.5,0,-11.4],[3.5,1.1,-9.2],'#d3a066',1,{block:1});B([-3.5,0,9.2],[3.5,1.1,11.4],'#d3a066',1,{block:1});
- B([-18,0,-11.5],[-15,2.1,-8.5],'#c58d55',1,{block:1});B([15,0,8.5],[18,2.1,11.5],'#c58d55',1,{block:1});
+ B([-3.5,0,-11.4],[3.5,1.1,-9.2],'#d4863a',5,{block:1});B([-3.5,0,9.2],[3.5,1.1,11.4],'#d4863a',5,{block:1});
+ B([-18,0,-11.5],[-15,2.1,-8.5],'#c97a32',5,{block:1});B([15,0,8.5],[18,2.1,11.5],'#c97a32',5,{block:1});
  // low ledges up to the deck (jump on, then jump up)
  const LH=ARENA.LEDGE;
- [[-7,1],[7,-1]].forEach(([cx,s])=>{const z0=s>0?K.z1:K.z0-1.8,z1=s>0?K.z1+1.8:K.z0;LEDGES.push(Object.assign(B([cx-2,0,z0],[cx+2,LH,z1],'#d39a5c',1,{ledge:1}),{ax:'z',s,cx,cz:s*(K.z1+.9)}));});
- [[1],[-1]].forEach(([s])=>{const x0=s>0?K.x1:K.x0-1.8,x1=s>0?K.x1+1.8:K.x0;LEDGES.push(Object.assign(B([x0,0,-2],[x1,LH,2],'#d39a5c',1,{ledge:1}),{ax:'x',s,cx:s*(K.x1+.9),cz:0}));});
+ [[-7,1],[7,-1]].forEach(([cx,s])=>{const z0=s>0?K.z1:K.z0-1.8,z1=s>0?K.z1+1.8:K.z0;LEDGES.push(Object.assign(B([cx-2,0,z0],[cx+2,LH,z1],'#cf8540',5,{ledge:1}),{ax:'z',s,cx,cz:s*(K.z1+.9)}));});
+ [[1],[-1]].forEach(([s])=>{const x0=s>0?K.x1:K.x0-1.8,x1=s>0?K.x1+1.8:K.x0;LEDGES.push(Object.assign(B([x0,0,-2],[x1,LH,2],'#cf8540',5,{ledge:1}),{ax:'x',s,cx:s*(K.x1+.9),cz:0}));});
  // wall pegs sticking out of the deck edges
- [[3,1],[11,1],[-3,-1],[-11,-1]].forEach(([x,s])=>{const z0=s>0?K.z1:K.z0-.9,z1=s>0?K.z1+.9:K.z0;PEGS.push(B([x-.45,K.y0-.4,z0],[x+.45,K.y0-.05,z1],'#7f8c8d',0,{peg:1}));});
+ [[3,1],[11,1],[-3,-1],[-11,-1]].forEach(([x,s])=>{const z0=s>0?K.z1:K.z0-.9,z1=s>0?K.z1+.9:K.z0;PEGS.push(B([x-.45,K.y0-.4,z0],[x+.45,K.y0-.05,z1],'#3d2f27',0,{peg:1}));});
+ // small dark ledges on the walls
+ [[-10,1],[10,1],[-10,-1],[10,-1]].forEach(([x,s])=>{const z0=s>0?D-.8:-D,z1=s>0?D:-D+.8;B([x-1.1,2.75,z0],[x+1.1,3.05,z1],'#3d2f27',0,{wled:1});});
+ [[1,7],[-1,-7]].forEach(([s,z])=>{const x0=s>0?W-.8:-W,x1=s>0?W:-W+.8;B([x0,2.75,z-1.1],[x1,3.05,z+1.1],'#3d2f27',0,{wled:1});});
 })();
 /* ---------- quick math for the power strip ---------- */
 /* ---------- quick math for the power strip ---------- */
@@ -1593,7 +1655,7 @@ function quickQ(topics){
  return {p,ch:alts.map(v=>fmt(v)),a:alts.indexOf(a),t};
 }
 /* ---------- state ---------- */
-let ACFG={game:'party',mode:1,bots:3,skill:1,to:3,pure:false,floor:'glass'};
+let ACFG={game:'party',mode:1,bots:3,skill:1,to:3,pure:false,floor:'classic'};
 let AS=null;
 function newPlayer(id,name,col,human,look){return {id,name,col,human,look:look||null,x:0,y:0,z:0,vx:0,vy:0,vz:0,yaw:0,ground:false,climb:false,tj:0,wallT:0,wallN:[0,0],wallHops:0,
  out:false,outT:0,speedT:0,shieldT:0,boostT:0,lock:false,anim:0,stuck:0,
@@ -1766,15 +1828,16 @@ void main(){vec4 w=uM*vec4(aP,1.);vW=w.xyz;vN=mat3(uM)*aN;vC=mix(aC,uTint,uUseTi
 void main(){vec3 n=normalize(vN);vec3 c=vC;
 if(vT>.5&&vT<1.5){vec2 uv=abs(n.x)>.5?vW.zy:abs(n.z)>.5?vW.xy:vW.xz;vec2 f=fract(uv*1.25)-.5;float d=length(f);c*=d<.17?.8:(d<.22?.9:1.);}
 if(vT>1.5&&vT<2.5){vec2 uv=abs(n.x)>.5?vW.zy:abs(n.z)>.5?vW.xy:vW.xz;vec2 f=fract(uv*.85);float e=min(min(f.x,1.-f.x),min(f.y,1.-f.y));if(e>.09&&abs(f.x-f.y)>.07&&abs(f.x+f.y-1.)>.07)discard;}
-if(vT>3.5){float k=fract((vW.x+vW.z)*.09);c=mix(c,vec3(1.),k>.965?.45:0.);}else if(vT>2.5){vec2 f=fract(vW.xz*.5);c*=(f.x<.03||f.y<.03)?.86:1.;vec2 g=fract(vW.xz*1.25)-.5;c*=length(g)<.15?.93:1.;}
-float l=.58+.42*max(dot(n,normalize(vec3(.35,1.,.25))),0.)+.12*max(dot(n,normalize(vec3(-.6,.3,-.5))),0.);
-vec3 col=c*l+c*uGlow;float fog=clamp((length(vW-uEye)-28.)/50.,0.,.5);col=mix(col,vec3(.95,.82,.66),fog);gl_FragColor=vec4(col,uAlpha);}`;
+if(vT>4.5){vec2 uv=abs(n.y)>.5?vW.xz:(abs(n.x)>.5?vW.yz:vW.yx);float rr=floor(uv.y*1.15),pl=fract(uv.y*1.15),h=fract(sin(rr*12.9898)*43758.5453),e=fract(uv.x*.14+h);c*=(pl<.04||e<.01)?.72:1.;c*=.92+.08*sin(uv.x*4.+h*30.+sin(uv.x*1.3+rr)*2.5);c*=.92+.14*h;}
+else if(vT>3.5){float k=fract((vW.x+vW.z)*.09);c=mix(c,vec3(1.),k>.965?.45:0.);}else if(vT>2.5){vec2 f=fract(vW.xz*.5);c*=(f.x<.03||f.y<.03)?.86:1.;vec2 g=fract(vW.xz*1.25)-.5;c*=length(g)<.15?.93:1.;}
+float l=.64+.40*max(dot(n,normalize(vec3(.35,1.,.25))),0.)+.12*max(dot(n,normalize(vec3(-.6,.3,-.5))),0.);
+vec3 col=(c*l+c*uGlow)*vec3(1.06,.98,.88)+c*.07*clamp(vW.y/12.,0.,1.);float fog=clamp((length(vW-uEye)-30.)/55.,0.,.45);col=mix(col,vec3(.98,.80,.56),fog);gl_FragColor=vec4(col,uAlpha);}`;
  const sh=(t,s)=>{const o=g.createShader(t);g.shaderSource(o,s);g.compileShader(o);if(!g.getShaderParameter(o,g.COMPILE_STATUS))throw new Error(g.getShaderInfoLog(o));return o;};
  glP=g.createProgram();g.attachShader(glP,sh(g.VERTEX_SHADER,vs));g.attachShader(glP,sh(g.FRAGMENT_SHADER,fs));g.linkProgram(glP);g.useProgram(glP);
  ['aP','aN','aC','aT'].forEach(n=>glP[n]=g.getAttribLocation(glP,n));['uVP','uM','uTint','uUseTint','uEye','uAlpha','uGlow'].forEach(n=>glP[n]=g.getUniformLocation(glP,n));
- const mv=[];MAP.forEach(b=>{if(!b.deck)boxVerts(b.a,b.b,hex(b.c),b.t,mv);});mapCount=mv.length/10;mapBuf=g.createBuffer();g.bindBuffer(g.ARRAY_BUFFER,mapBuf);g.bufferData(g.ARRAY_BUFFER,new Float32Array(mv),g.STATIC_DRAW);
+ const mv=[];MAP.concat(DECO).forEach(b=>{if(!b.deck)boxVerts(b.a,b.b,hex(b.c),b.t,mv);});mapCount=mv.length/10;mapBuf=g.createBuffer();g.bindBuffer(g.ARRAY_BUFFER,mapBuf);g.bufferData(g.ARRAY_BUFFER,new Float32Array(mv),g.STATIC_DRAW);
  const cv2=[];boxVerts([-.5,-.5,-.5],[.5,.5,.5],[1,1,1],0,cv2);cubeBuf=g.createBuffer();g.bindBuffer(g.ARRAY_BUFFER,cubeBuf);g.bufferData(g.ARRAY_BUFFER,new Float32Array(cv2),g.STATIC_DRAW);
- g.enable(g.DEPTH_TEST);g.clearColor(.93,.8,.64,1);return true;}
+ g.enable(g.DEPTH_TEST);g.clearColor(.96,.78,.52,1);return true;}
 function bindBuf(b){const g=GL;g.bindBuffer(g.ARRAY_BUFFER,b);const st=40;g.enableVertexAttribArray(glP.aP);g.vertexAttribPointer(glP.aP,3,g.FLOAT,false,st,0);g.enableVertexAttribArray(glP.aN);g.vertexAttribPointer(glP.aN,3,g.FLOAT,false,st,12);g.enableVertexAttribArray(glP.aC);g.vertexAttribPointer(glP.aC,3,g.FLOAT,false,st,24);g.enableVertexAttribArray(glP.aT);g.vertexAttribPointer(glP.aT,1,g.FLOAT,false,st,36);}
 function cube(m,col,alpha=1,glow=0){const g=GL;g.uniformMatrix4fv(glP.uM,false,m);g.uniform3fv(glP.uTint,typeof col==='string'?hex(col):col);g.uniform1f(glP.uAlpha,alpha);g.uniform1f(glP.uGlow,glow);g.drawArrays(g.TRIANGLES,0,36);}
 function part(base,x,y,z,sx,sy,sz,col,rx=0,pivotY=0,glow=0){let m=M4.T(base,x,y+pivotY,z);if(rx)m=M4.RX(m,rx);m=M4.T(m,0,-pivotY,0);m=M4.S(m,sx,sy,sz);cube(m,col,1,glow);}
@@ -1797,7 +1860,7 @@ function drawPlayer(p,t){
 }
 let deckBuf=null,deckCount=0;
 function buildDeckBuf(floor){const g=GL,v=[];const glass=floor!=='classic';
- MAP.forEach(b=>{if(b.deck)boxVerts(b.a,b.b,hex(glass?'#b8e6ff':'#c48446'),glass?4:1,v);});deckCount=v.length/10;
+ MAP.forEach(b=>{if(b.deck)boxVerts(b.a,b.b,hex(glass?'#b8e6ff':b.c),glass?4:5,v);});deckCount=v.length/10;
  if(!deckBuf)deckBuf=g.createBuffer();g.bindBuffer(g.ARRAY_BUFFER,deckBuf);g.bufferData(g.ARRAY_BUFFER,new Float32Array(v),g.STATIC_DRAW);}
 function blendOn(){const g=GL;g.enable(g.BLEND);g.blendFunc(g.SRC_ALPHA,g.ONE_MINUS_SRC_ALPHA);g.depthMask(false);}
 function blendOff(){const g=GL;g.depthMask(true);g.disable(g.BLEND);}
@@ -1839,6 +1902,7 @@ function render(t){
   const sc=[(SIGN.a[0]+SIGN.b[0])/2,(SIGN.a[1]+SIGN.b[1])/2,(SIGN.a[2]+SIGN.b[2])/2];
   cube(M4.S(M4.T(M4.id(),...sc),SIGN.b[0]-SIGN.a[0]+.3,SIGN.b[1]-SIGN.a[1]+.3,.3),'#0b1622',1,0);
   cube(M4.S(M4.T(M4.id(),sc[0],sc[1],sc[2]+.05),SIGN.b[0]-SIGN.a[0],SIGN.b[1]-SIGN.a[1],.4),'#1e3a5f',1,.35+Math.sin(t*2)*.08);
+  LIGHTS.forEach(([x,y,z])=>{cube(M4.S(M4.T(M4.id(),x,y,z),3.2,.2,1.6),'#fff3d6',1,.85);});
   AS.players.forEach(pl=>{if(!pl.out)drawPlayer(pl,t);});
   FX.forEach(f=>{if(f.k==='puff')return;let m=M4.T(M4.id(),f.x,f.y,f.z);if(f.k==='star'){m=M4.RY(m,t*8+f.s*20);m=M4.RX(m,.6);}cube(M4.S(m,f.s,f.s,f.k==='star'?f.s*.35:f.s),f.c,1,.5);});
   if(AS.holder>=0)drawVault(AS.players[AS.holder],t,AS.holder===v.pid);
@@ -1863,6 +1927,8 @@ const lum=h=>{const [r,g,b]=hex(h);return .3*r+.59*g+.11*b;};const tcol=c=>lum(c
 const faceHTML=p=>{const lk=p.look||{skin:'#f6d32d',suit:p.col};return `<span class="aface" style="--sk:${lk.skin};--su:${lk.suit}"><i></i></span>`;};
 function hud(){
  const f=$('#afuse');
+ {const md=`Double Decker · ${AS.mode==='duel'?'Duel':window.NETA?'Play Together':'Party'} · Round ${AS.round}`,me=$('#amode');if(me._k!==md){me._k=md;me.textContent=md;}
+  const sl=AV.map(v=>{const p=AS.players[v.pid];const held=AS.holder===v.pid&&AS.phase==='play';return `<div class="aslot${held?' on':''}${p&&p.out?' out':''}" title="Held item"><small>${AV.length>1?esc(p.name):'1'}</small>${held?'<span class="gv"></span>':p&&p.out?'👻':''}</div>`;}).join(''),se=$('#aslots');if(se._k!==sl){se._k=sl;se.innerHTML=sl;}}
  if(AS.phase==='play'&&AS.holder>=0){const h=AS.players[AS.holder];$('#afuseT').textContent=Math.max(0,AS.fuse).toFixed(1);$('#afuseWho').innerHTML=`<span class="apl" style="background:${h.col}">${esc(h.name)}</span> ${h.name==='You'?'have':'has'} it!`;f.classList.toggle('hot',AS.fuse<3);f.style.visibility='';}
  else f.style.visibility='hidden';
  const sb=$('#ascore');
@@ -2114,7 +2180,7 @@ function guestLost(){if(!MP||MP.gone)return;const j=MP.joining;netCleanup();if(j
 
 /* ---- host ---- */
 function mkP(id,name,eq,col,host){return {id,name,eq,col,team:'red',ready:!!host,host:!!host,x:.36+Math.random()*.28,y:.4+Math.random()*.45,score:0,done:0,fin:false,time:0,left:false};}
-function mpHost(){netCleanup();MP={role:'host',me:0,H:{code:null,codeErr:null,game:'dials',fuse:15,bots:0,pure:0,floor:'glass',mode:'vs',topics:'week',dials:8,lvl:2,phase:'lobby',players:[mkP(0,myName(),cleanEq(S.eq),NCOLS[0],true)],pending:[],next:1},links:{},pos:{},peer:null,bc:null,pairs:[]};
+function mpHost(){netCleanup();MP={role:'host',me:0,H:{code:null,codeErr:null,game:'dials',fuse:15,bots:0,pure:0,floor:'classic',mode:'vs',topics:'week',dials:8,lvl:2,phase:'lobby',players:[mkP(0,myName(),cleanEq(S.eq),NCOLS[0],true)],pending:[],next:1},links:{},pos:{},peer:null,bc:null,pairs:[]};
  go('mpLobby');lobbyEnter();hostOpenRoom();MP.posT=setInterval(hostPosTick,120);}
 function hostOpenRoom(){if(NTEST){const c=newCode();MP.bc=bcHost(c,hostConn);setCode(c);return;}
  const H=MP.H;const to=setTimeout(()=>{if(MP&&MP.H===H&&!H.code)setCode(null,'broker');},12000);
@@ -2225,6 +2291,8 @@ function renderLobby(){if(!MP||cur!=='mpLobby')return;const s=netSt();if(!s)retu
  const c=s.code;$('#lcode').innerHTML=c?[...c].map((d,i)=>`<span class="${i===3?'gap':''}">${d}</span>`).join(''):s.codeErr?`<em>No code on this WiFi</em>`:`<em>making a code…</em>`;
  $('#lboardHint').innerHTML=c?'Open Vault Crack → 📡 Play Together → 🔑 Join':s.codeErr?'Host: tap 📷 Pair with QR to bring agents in':'Connecting to the room service…';
  $('#lboard').classList.toggle('err',!c&&!!s.codeErr);
+ {const n=s.players.length,need=Math.max(0,2-n),nr=s.players.filter(p=>!p.ready&&!p.host).length;
+  $('#lwait').innerHTML=need?`Waiting for <b>${need}</b> more player${need>1?'s':''}`:nr?`Waiting for <b>${nr}</b> more player${nr>1?'s':''} to get ready`:`<b>${n}</b> agents ready · host can start`;}
  $('#lroom').classList.toggle('teams',s.mode==='team'&&s.game!=='arena');
  $('#mpRole').textContent=host?'👑 You are the host':'🕵️ Waiting room';$('#mpQrHost').hidden=!host;
  $('#mpCount').textContent=`(${s.players.length} of ${NMAX})`;

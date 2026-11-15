@@ -272,12 +272,12 @@ table.io td,table.io th{border:2px solid #000;background:#0006;padding:4px 10px;
 /* ===== arena v2 ===== */
 .mapart{background:radial-gradient(circle,#b97a40 1.6px,#0000 2.2px) 0 0/9px 9px,linear-gradient(#efc08a,#d39a5c)}
 .mapart .ceil{left:0;right:0;top:0;height:8%;background:#e8b47e;border-width:0 0 3px}
-.mapart .deck{left:12%;right:12%;top:46%;height:12%;background:linear-gradient(#cdefffcc,#8fd3f5aa);border-color:#9c6331}
-.mapart .hole{left:45%;width:10%;top:46%;height:12%;background:#e9b884;border-color:#9c6331}
+.mapart .deck{left:12%;right:12%;top:54%;height:10%;background:linear-gradient(#cdefffcc,#8fd3f5aa);border-color:#9c6331}
+.mapart .hole{left:45%;width:10%;top:54%;height:10%;background:#e9b884;border-color:#9c6331}
 .mapart .truss{left:48%;width:4%;top:8%;bottom:0;background:repeating-linear-gradient(45deg,#7f8c8d 0 3px,#0000 3px 8px),repeating-linear-gradient(-45deg,#7f8c8d 0 3px,#0000 3px 8px);border-color:#555;border-width:0 3px}
-.mapart .p1,.mapart .p2{top:58%;bottom:0;width:9%;background:#c9935a}.mapart .p1{left:22%}.mapart .p2{right:22%}
-.mapart .ldg{left:3%;width:9%;top:76%;bottom:0;background:#d39a5c}
-.mapart .sgn{right:4%;width:16%;top:20%;height:13%;background:#1e3a5f;box-shadow:0 0 12px #48dbfb}
+.mapart .p1,.mapart .p2{top:64%;bottom:0;width:9%;background:#c9935a}.mapart .p1{left:22%}.mapart .p2{right:22%}
+.mapart .ldg{left:3%;width:9%;top:78%;bottom:0;background:#d39a5c}
+.mapart .sgn{right:4%;width:16%;top:18%;height:13%;background:#1e3a5f;box-shadow:0 0 12px #48dbfb}
 .seg button:disabled{opacity:.35}
 .amid{margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
 .amid>*{pointer-events:auto}
@@ -1268,13 +1268,13 @@ go('home');
    - simStep(AS, inputs, dt) is the only thing that changes AS.
    - render() and HUD read AS only. ArenaNet.snapshot()/apply() round-trip JSON.
    ===================================================================== */
-const ARENA={W:20,D:14,H:12,DECK:{x0:-13,x1:13,z0:-6,z1:6,y0:2.3,y1:3.2},HOLE:2.6,GRAV:32,JUMP:12.5,FUSE:10,SPEED:6.6,GRACE:1};
+const ARENA={W:20,D:14,H:12,DECK:{x0:-13,x1:13,z0:-6,z1:6,y0:4.0,y1:4.95},HOLE:2.6,GRAV:32,JUMP:13.6,FUSE:10,SPEED:6.6,GRACE:1,LEDGE:2.3};
 const PCOL=['#54a0ff','#ff9f43','#1dd1a1','#ff6b6b','#a29bfe','#feca57','#ff9ff3'];
 const BOTN=['Bot Blocky','Bot Turbo','Bot Pixel','Bot Bolt','Bot Cubie'];
 const K=ARENA.DECK,HL=ARENA.HOLE;
 /* ---------- map geometry ---------- */
 const MAP=[]; // {a:[x,y,z],b:[x,y,z],c:'#hex',t:0 plain 1 pegboard 2 truss 3 floor, flags}
-const SIGN={a:[8.5,3.6,-ARENA.D+.05],b:[14.5,6.2,-ARENA.D+.45]};
+const SIGN={a:[8.5,5.5,-ARENA.D+.05],b:[14.5,8.1,-ARENA.D+.45]};
 const LEDGES=[],PEGS=[];
 (function buildMap(){const W=ARENA.W,D=ARENA.D,H=ARENA.H;
  const B=(a,b,c,t=0,o={})=>{const r=Object.assign({a,b,c,t},o);MAP.push(r);return r;};
@@ -1299,11 +1299,11 @@ const LEDGES=[],PEGS=[];
  B([-3.5,0,-11.4],[3.5,1.1,-9.2],'#d3a066',1,{block:1});B([-3.5,0,9.2],[3.5,1.1,11.4],'#d3a066',1,{block:1});
  B([-18,0,-11.5],[-15,2.1,-8.5],'#c58d55',1,{block:1});B([15,0,8.5],[18,2.1,11.5],'#c58d55',1,{block:1});
  // low ledges up to the deck (jump on, then jump up)
- const LH=1.5;
+ const LH=ARENA.LEDGE;
  [[-7,1],[7,-1]].forEach(([cx,s])=>{const z0=s>0?K.z1:K.z0-1.8,z1=s>0?K.z1+1.8:K.z0;LEDGES.push(Object.assign(B([cx-2,0,z0],[cx+2,LH,z1],'#d39a5c',1,{ledge:1}),{ax:'z',s,cx,cz:s*(K.z1+.9)}));});
  [[1],[-1]].forEach(([s])=>{const x0=s>0?K.x1:K.x0-1.8,x1=s>0?K.x1+1.8:K.x0;LEDGES.push(Object.assign(B([x0,0,-2],[x1,LH,2],'#d39a5c',1,{ledge:1}),{ax:'x',s,cx:s*(K.x1+.9),cz:0}));});
  // wall pegs sticking out of the deck edges
- [[3,1],[11,1],[-3,-1],[-11,-1]].forEach(([x,s])=>{const z0=s>0?K.z1:K.z0-.9,z1=s>0?K.z1+.9:K.z0;PEGS.push(B([x-.45,1.95,z0],[x+.45,2.25,z1],'#7f8c8d',0,{peg:1}));});
+ [[3,1],[11,1],[-3,-1],[-11,-1]].forEach(([x,s])=>{const z0=s>0?K.z1:K.z0-.9,z1=s>0?K.z1+.9:K.z0;PEGS.push(B([x-.45,K.y0-.4,z0],[x+.45,K.y0-.05,z1],'#7f8c8d',0,{peg:1}));});
 })();
 /* ---------- quick math for the power strip ---------- */
 /* ---------- quick math for the power strip ---------- */
@@ -1355,7 +1355,7 @@ function moveAxis(p,ax,d,push){if(!d)return;const k=['x','y','z'][ax];p[k]+=d;
  for(const b of MAP){if(!overlaps(p,b))continue;
   if(ax===1){if(d<0){p.y=b.b[1];p.vy=0;p.ground=true;}else{p.y=b.a[1]-PHT-1e-4;p.vy=0;}continue;}
   // step up small lips on the ground, ledge-grab bigger ones in the air (only when pushing into them)
-  const lip=b.b[1]-p.y,lim=p.ground?.45:(push?.65:0);
+  const lip=b.b[1]-p.y,lim=p.ground?.45:(push?1.15:0);
   if(lip>0&&lip<=lim&&p.vy<9){const oy=p.y;p.y=b.b[1]+1e-3;if(!anyOverlap(p)){if(!p.ground){p.vy=Math.max(p.vy,2.5);AS.events.push({e:'grab',id:p.id});}continue;}p.y=oy;}
   if(d>0)p[k]=b.a[ax]-PH-1e-4;else p[k]=b.b[ax]+PH+1e-4;if(ax===0)p.vx=0;else p.vz=0;
   if(!b.truss&&b.b[1]-p.y>1.2&&!p.ground){p.wallT=.2;p.wallN=ax===0?[d>0?-1:1,0]:[0,d>0?-1:1];}}}
@@ -1366,7 +1366,7 @@ function simPlayer(p,inp,dt){
  const cy=inp.cy!==undefined?inp.cy:p.yaw;const fx=Math.sin(cy),fz=Math.cos(cy),rx=-fz,rz=fx;
  const dx=fx*my+rx*mx,dz=fz*my+rz*mx;
  if(p.out){// ghost spectator: floats, drifts through things, stays in the room
-  p.outT+=dt;p.x+=dx*5*dt;p.z+=dz*5*dt;p.y+=(4.6+Math.sin(p.outT*2)*.3-p.y)*Math.min(1,dt*2);
+  p.outT+=dt;p.x+=dx*5*dt;p.z+=dz*5*dt;p.y+=(K.y1+.5+Math.sin(p.outT*2)*.3-p.y)*Math.min(1,dt*2);
   p.x=Math.max(-ARENA.W+1,Math.min(ARENA.W-1,p.x));p.z=Math.max(-ARENA.D+1,Math.min(ARENA.D-1,p.z));if(dx||dz)p.yaw=Math.atan2(dx,dz);p.vx=dx*5;p.vz=dz*5;p.anim+=dt;return;}
  p.lock=!!inp.lock;
  const sp=ARENA.SPEED*(p.speedT>0?1.3:1)*(p.boostT>0?1.35:1);
@@ -1379,9 +1379,9 @@ function simPlayer(p,inp,dt){
  if(tr&&(dx||dz)){const cx=-p.x,cz=-p.z;pushing=(cx*dx+cz*dz)/(Math.hypot(cx,cz)||1)>.15;}
  p.climb=!!(tr&&pushing);
  if(inp.jump){
-  if(tr&&!p.ground){p.vy=12;p.tj++;AS.events.push({e:'trusshop',id:p.id,n:p.tj});if(p.tj===2){p.boostT=1.2;AS.events.push({e:'trussboost',id:p.id});}}
+  if(tr&&!p.ground){p.vy=13;p.tj++;AS.events.push({e:'trusshop',id:p.id,n:p.tj});if(p.tj===2){p.boostT=1.2;AS.events.push({e:'trussboost',id:p.id});}}
   else if(p.ground){p.vy=ARENA.JUMP;p.ground=false;AS.events.push({e:'jump',id:p.id});}
-  else if(p.wallT>0&&p.wallHops<2){p.vy=11.5;p.vx+=p.wallN[0]*7.5;p.vz+=p.wallN[1]*7.5;p.wallHops++;p.wallT=0;AS.events.push({e:'wallhop',id:p.id});}}
+  else if(p.wallT>0&&p.wallHops<2){p.vy=13;p.vx+=p.wallN[0]*7.5;p.vz+=p.wallN[1]*7.5;p.wallHops++;p.wallT=0;AS.events.push({e:'wallhop',id:p.id});}}
  p.vy-=ARENA.GRAV*dt;if(p.climb)p.vy=Math.max(p.vy,6.5);if(p.vy<-30)p.vy=-30;
  const wasGround=p.ground;p.ground=false;
  const gp=wasGround;p.ground=gp; // keep "on ground" during horizontal moves for step-ups
@@ -1419,7 +1419,7 @@ function grantBoost(p,kind){if(AS.pure)return;
  else if(kind==='speed')p.speedT=2.5;else{kind='shield';p.shieldT=2;}
  AS.events.push({e:'boost',id:p.id,k:kind});}
 /* ---------- bots ---------- */
-const onDeck=p=>p.y>2.9&&!p.climb;
+const onDeck=p=>p.y>K.y1-.3&&!p.climb;
 const inDeckXZ=(x,z,m=0)=>x>K.x0-m&&x<K.x1+m&&z>K.z0-m&&z<K.z1+m;
 const inHoleXZ=(x,z,m=0)=>Math.abs(x)<HL+m&&Math.abs(z)<HL+m;
 const overSlab=(x,z)=>inDeckXZ(x,z)&&!inHoleXZ(x,z);
@@ -1449,7 +1449,7 @@ function planRoute(p,g){if(!g)return [];const pd=onDeck(p);
  if(!!g.deck===pd)return [{x:g.x,z:g.z,r:.6,need:pd?'deck':null}];
  const rs=pd?routesDown(p,g):routesUp(p,g);rs.sort((a,b)=>a.cost-b.cost);
  const r=AS.skill===0?pick(rs.slice(0,2)):rs[0];return r.wp.map(w=>Object.assign({},w));}
-function needOK(p,n){if(!n)return true;if(n==='deck')return onDeck(p);if(n==='ground')return p.y<1&&p.ground;if(n==='ledge')return p.ground&&p.y>1.2;if(n==='high')return p.y>K.y1+1.1;return true;}
+function needOK(p,n){if(!n)return true;if(n==='deck')return onDeck(p);if(n==='ground')return p.y<1&&p.ground;if(n==='ledge')return p.ground&&p.y>ARENA.LEDGE-.3;if(n==='high')return p.y>K.y1+1.1;return true;}
 function botThink(p,dt){
  const b=p.bot,inp={mx:0,my:0,cy:p.yaw,jump:false,lock:false};if(p.out||AS.phase!=='play'&&AS.phase!=='poof')return inp;
  b.replan-=dt;b.mathT-=dt;b.jt-=dt;
@@ -1458,7 +1458,7 @@ function botThink(p,dt){
  if(b.replan<=0){b.replan=holding?[.6,.35,.25][AS.skill]:[.9,.6,.45][AS.skill]+Math.random()*.3;
   let goal=null;
   if(holding){const tg=alive().filter(o=>o!==p&&o.shieldT<=0&&!(o.id===AS.graceFrom&&AS.graceT>.3)).sort((u,v)=>d3(p,u)-d3(p,v))[0];
-   if(tg){const lead=[0,.25,.4][AS.skill];goal={x:tg.x+tg.vx*lead,z:tg.z+tg.vz*lead,deck:onDeck(tg)||tg.y>2.6};}}
+   if(tg){const lead=[0,.25,.4][AS.skill];goal={x:tg.x+tg.vx*lead,z:tg.z+tg.vz*lead,deck:onDeck(tg)||tg.y>K.y1-.4};}}
   else if(H&&!H.out&&d3(p,H)<15){let best=null,bs=-1e9;for(let i=0;i<12;i++){const c=randSpot(Math.random()<.45);
     const sc=Math.hypot(c.x-H.x,c.z-H.z)+(c.deck!==onDeck(H)?5:0)-.3*Math.hypot(c.x-p.x,c.z-p.z)-(c.deck!==onDeck(p)?2:0);if(sc>bs){bs=sc;best=c;}}goal=best;}
   else if(!b.goal||Math.random()<.25)goal=randSpot(Math.random()<.4);
@@ -1549,15 +1549,15 @@ let AV=[];   // local views (one per human on this device)
 let FX=[];   // local particles (render only)
 function viewRects(){const w=innerWidth,h=innerHeight;if(AV.length<2)return [{x:0,y:0,w,h}];return w>=h?[{x:0,y:0,w:w/2,h},{x:w/2,y:0,w:w/2,h}]:[{x:0,y:0,w,h:h/2},{x:0,y:h/2,w,h:h/2}];}
 function camFor(v,p){if(window.ACAM)return window.ACAM;
- const dist=7.2,hgt=3.1;let ex=p.x-Math.sin(v.cy)*dist,ez=p.z-Math.cos(v.cy)*dist,ey=p.y+hgt;
+ const dist=7.6,hgt=3.5;let ex=p.x-Math.sin(v.cy)*dist,ez=p.z-Math.cos(v.cy)*dist,ey=p.y+hgt;
  ex=Math.max(-ARENA.W+.6,Math.min(ARENA.W-.6,ex));ez=Math.max(-ARENA.D+.6,Math.min(ARENA.D-.6,ez));ey=Math.min(ARENA.H-.5,ey);
- if(!p.out){if(p.y<2.2&&overSlab(ex,ez))ey=Math.min(ey,K.y0-.3);
-  if(p.y>=2.9&&inDeckXZ(ex,ez,.8))ey=Math.max(ey,K.y1+1.3);}
+ if(!p.out){if(p.y<K.y0-.2&&overSlab(ex,ez))ey=Math.min(ey,K.y0-.3);
+  if(p.y>=K.y1-.3&&inDeckXZ(ex,ez,.8))ey=Math.max(ey,K.y1+1.4);}
  // keep the camera out of the chunky blocks: slide it in toward the player
  const hx=p.x,hy=p.y+1.6,hz=p.z;for(let i=1;i<=16;i++){const f=i/16,px=hx+(ex-hx)*f,py=hy+(ey-hy)*f,pz=hz+(ez-hz)*f;if(CAMSOLID.some(b=>px>b.a[0]-.25&&px<b.b[0]+.25&&py>b.a[1]-.25&&py<b.b[1]+.25&&pz>b.a[2]-.25&&pz<b.b[2]+.25)){const g=Math.max(0,(i-1.5)/16);ex=hx+(ex-hx)*g;ey=hy+(ey-hy)*g+.6*(1-g);ez=hz+(ez-hz)*g;break;}}
  v.eye=v.eye?v.eye.map((a,i)=>a+([ex,ey,ez][i]-a)*.18):[ex,ey,ez];
  const tgt=[p.x+Math.sin(v.cy)*2,p.y+1.8,p.z+Math.cos(v.cy)*2];return {eye:v.eye,tgt};}
-const CAMSOLID=MAP.filter(b=>b.block||b.ledge);
+const CAMSOLID=MAP.filter(b=>b.block);
 function render(t){
  const g=GL,cv=$('#acv'),dpr=Math.min(1.5,devicePixelRatio||1);const W=Math.round(innerWidth*dpr),H=Math.round(innerHeight*dpr);if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H;}
  const rects=viewRects();g.enable(g.SCISSOR_TEST);const glass=AS.floor!=='classic';
@@ -1588,7 +1588,7 @@ function project(v,x,y,z){const m=v.VP;const cx=m[0]*x+m[4]*y+m[8]*z+m[12],cy=m[
 function labels(){const L=$('#alabels');let html='';
  AV.forEach(v=>{const r=v.rect,inR=s=>s&&s[0]>=r.x&&s[0]<=r.x+r.w&&s[1]>=r.y&&s[1]<=r.y+r.h;
   const ss=project(v,(SIGN.a[0]+SIGN.b[0])/2,(SIGN.a[1]+SIGN.b[1])/2+.5,SIGN.b[2]+.2);if(inR(ss)&&ss[0]>r.x+60&&ss[0]<r.x+r.w-60)html+=`<div class="alabel asign" style="left:${ss[0]|0}px;top:${ss[1]|0}px">OPEN ARENA<small>Glitch Vault</small></div>`;
-  AS.players.forEach(p=>{const hold=AS.holder===p.id;const s=project(v,p.x,p.y+(hold?3.5:p.out?2.7:2.5),p.z);if(!inR(s))return;
+  AS.players.forEach(p=>{const hold=AS.holder===p.id;const s=project(v,p.x,p.y+(hold?3.5:p.out?2.1:2.5),p.z);if(!inR(s))return;
   const lx=Math.max(r.x+48,Math.min(r.x+r.w-48,s[0]));
   html+=`<div class="alabel" style="left:${lx|0}px;top:${s[1]|0}px;color:${tcol(p.col)}">${hold?`<span class="ft${AS.fuse<3?' hot':''}">${Math.max(0,AS.fuse).toFixed(1)}</span>`:''}${p.out?'<span class="lk">Out! 👻</span>':''}${p.shieldT>0?'🛡 ':''}${esc(p.name)}</div>`;});});
  L.innerHTML=html;}

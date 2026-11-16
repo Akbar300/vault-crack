@@ -1990,7 +1990,7 @@ const lookPtrs=new Map();
 function viewAt(x,y){return (AV.find(v=>v.rect&&x>=v.rect.x&&x<v.rect.x+v.rect.w&&y>=v.rect.y&&y<v.rect.y+v.rect.h)||AV[0]);}
 function isLookTarget(el){if(!el)return false;const root=$('#arena');if(!root||!root.contains(el))return false;return !el.closest('button,.astrip,.abar,.ahud,.ajoy,a,input,textarea,.anogl,#ov,.ov');}
 function lookAvg(){let x=0,y=0,n=0;lookPtrs.forEach(p=>{x+=p.x;y+=p.y;n++;});return n?{x:x/n,y:y/n}:null;}
-function applyLook(v,dx,dy){if(!v)return;v.cy-=dx*.008;v.cp=Math.max(-.65,Math.min(.55,(v.cp||0)+dy*.006));lookHold=performance.now()+220;}
+function applyLook(v,dx,dy){if(!v)return;v.cy+=dx*.008;v.cp=Math.max(-.65,Math.min(.55,(v.cp||0)-dy*.006));lookHold=performance.now()+220;}
 function clearLook(){lookPtrs.clear();camDrag=null;}
 function canvasDrag(){const root=$('#arena');
  root.addEventListener('pointerdown',e=>{if(cur!=='arena')return;

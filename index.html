@@ -228,7 +228,8 @@ table.io td,table.io th{border:2px solid #000;background:#0006;padding:4px 10px;
 .mapart .t1{left:9%}.mapart .t2{right:9%}
 .mapart .l1{left:44%;width:12%;top:58%;height:6%;background:#c98a4f}
 .mapart .pg{left:28%;top:66%;width:3%;height:4%;background:#888;box-shadow:16px -14px 0 #888}
-#arena.on{position:fixed;inset:0;max-width:none;padding:0;display:block;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;background:#e8c9a0}
+#arena.on{position:fixed;inset:0;max-width:none;padding:0;display:block;overflow:hidden;overscroll-behavior:none;touch-action:none;user-select:none;-webkit-user-select:none;background:#e8c9a0}
+body[data-scr="arena"]{overflow:hidden;overscroll-behavior:none;}
 #acv{position:absolute;inset:0;width:100%;height:100%;display:block}#alabels{position:absolute;inset:0;pointer-events:none;z-index:3}
 .ahud{position:absolute;top:8px;left:8px;right:8px;display:flex;align-items:flex-start;gap:8px;pointer-events:none;z-index:5}
 .ahud>*{pointer-events:auto}
@@ -1983,13 +1984,13 @@ function bindTouch(v){const el=v.el,joy=el.querySelector('.ajoy'),base=joy.query
  el.querySelectorAll('[data-ab]').forEach(b=>{const k=b.dataset.ab;b.addEventListener('pointerdown',e=>{e.preventDefault();if(k==='jump')v.tjump=true;if(k==='lock'){v.lock=!v.lock;v.eye=null;}});});
  el.querySelector('.astrip').addEventListener('click',e=>{const b=e.target.closest('[data-aopt]');if(b)answer(v,+b.dataset.aopt);});
 }
-// Camera look: two-finger drag on touch, right-mouse drag on desktop. One finger is for moving/playing only.
-let camDrag=null;
+// Camera look: two-finger drag on touch, two-finger trackpad swipe (wheel) or right-mouse drag on desktop. One finger is for moving/playing only.
+let camDrag=null,lookHold=0;
 const lookPtrs=new Map();
 function viewAt(x,y){return (AV.find(v=>v.rect&&x>=v.rect.x&&x<v.rect.x+v.rect.w&&y>=v.rect.y&&y<v.rect.y+v.rect.h)||AV[0]);}
 function isLookTarget(el){if(!el)return false;const root=$('#arena');if(!root||!root.contains(el))return false;return !el.closest('button,.astrip,.abar,.ahud,.ajoy,a,input,textarea,.anogl,#ov,.ov');}
 function lookAvg(){let x=0,y=0,n=0;lookPtrs.forEach(p=>{x+=p.x;y+=p.y;n++;});return n?{x:x/n,y:y/n}:null;}
-function applyLook(v,dx,dy){if(!v)return;v.cy-=dx*.008;v.cp=Math.max(-.65,Math.min(.55,(v.cp||0)+dy*.006));}
+function applyLook(v,dx,dy){if(!v)return;v.cy-=dx*.008;v.cp=Math.max(-.65,Math.min(.55,(v.cp||0)+dy*.006));lookHold=performance.now()+220;}
 function clearLook(){lookPtrs.clear();camDrag=null;}
 function canvasDrag(){const root=$('#arena');
  root.addEventListener('pointerdown',e=>{if(cur!=='arena')return;
@@ -2009,7 +2010,17 @@ function canvasDrag(){const root=$('#arena');
   if(lookPtrs.size>=2){const mid=lookAvg(),v=lookPtrs.values().next().value.v||viewAt(mid.x,mid.y);if(camDrag&&camDrag.mid)applyLook(v,mid.x-camDrag.mid.x,mid.y-camDrag.mid.y);camDrag={multi:true,v,mid};}});
  const up=e=>{lookPtrs.delete(e.pointerId);if(lookPtrs.size>=2){const q=lookPtrs.values().next().value;camDrag={multi:true,v:q&&q.v,mid:lookAvg()};}else if(camDrag&&(camDrag.multi||camDrag.id===e.pointerId))camDrag=null;};
  root.addEventListener('pointerup',up);root.addEventListener('pointercancel',up);root.addEventListener('lostpointercapture',up);
- root.addEventListener('contextmenu',e=>{if(cur==='arena')e.preventDefault();});}
+ root.addEventListener('contextmenu',e=>{if(cur==='arena')e.preventDefault();});
+ // Mac/desktop trackpad: two-finger swipe (no click) arrives as a wheel event
+ root.addEventListener('wheel',e=>{
+  if(cur!=='arena')return;
+  const ov=document.querySelector('#ov.on');if(ov&&ov.contains(e.target))return;
+  e.preventDefault();
+  if(e.ctrlKey||e.metaKey)return; // pinch: block page zoom, don't turn the camera
+  const v=viewAt(e.clientX,e.clientY);if(!v)return;
+  const u=e.deltaMode===1?16:e.deltaMode===2?(v.rect&&v.rect.h||innerHeight):1;
+  applyLook(v,e.deltaX*u*.7,e.deltaY*u*.7);
+ },{passive:false});}
 const P1K={up:['KeyW'],down:['KeyS'],left:['KeyA'],right:['KeyD'],jump:['Space'],lock:['ShiftLeft','KeyF'],cl:['KeyQ'],cr:['KeyE'],ans:['Digit1','Digit2','Digit3']};
 const P1SOLO={up:['KeyW','ArrowUp'],down:['KeyS','ArrowDown'],left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight'],jump:['Space'],lock:['ShiftLeft','ShiftRight','KeyF'],cl:['KeyQ'],cr:['KeyE'],ans:['Digit1','Digit2','Digit3']};
 const P2K={up:['ArrowUp'],down:['ArrowDown'],left:['ArrowLeft'],right:['ArrowRight'],jump:['Enter','Numpad0'],lock:['ShiftRight','Slash'],cl:['Comma'],cr:['Period'],ans:['Digit8','Digit9','Digit0']};
@@ -2025,7 +2036,7 @@ function gatherInput(v,dt){let mx=0,my=0;if(down(v,'up'))my+=1;if(down(v,'down')
  if(down(v,'cl'))v.cy+=dt*2.4;if(down(v,'cr'))v.cy-=dt*2.4;
  const p=AS.players[v.pid];
  // without lock-on, A/D turn the camera gently while running so it follows you
- if(!v.lock&&my>.3&&Math.abs(mx)<.5&&!camDrag&&!p.out){let df=p.yaw-v.cy;df=Math.atan2(Math.sin(df),Math.cos(df));v.cy+=df*Math.min(1,dt*1.2);}
+ if(!v.lock&&my>.3&&Math.abs(mx)<.5&&!camDrag&&performance.now()>lookHold&&!p.out){let df=p.yaw-v.cy;df=Math.atan2(Math.sin(df),Math.cos(df));v.cy+=df*Math.min(1,dt*1.2);}
  const inp={mx,my,cy:v.cy,jump:!!(v.kjump||v.tjump),lock:!!v.lock};
  v.kjump=v.tjump=false;return inp;}
 /* ---------- loop ---------- */
@@ -2095,7 +2106,7 @@ function arenaSetupRender(){const duel=ACFG.game==='duel';
  const maxB=6-ACFG.mode;$$('#aBots button').forEach(b=>{const n=+b.dataset.v;b.disabled=n>maxB||(ACFG.mode===1&&n===0);});
  $('#aBotsRow').hidden=duel;$('#aDuelRow').hidden=!duel;
  $('#aWho').textContent=duel?(ACFG.mode===2?'Player 1 vs Player 2 (split screen)':'You vs 1 bot'):`${ACFG.mode+Math.min(maxB,ACFG.bots)} players · last one standing wins`;
- $('#aKeys').innerHTML=ACFG.mode===2?'Player 1: WASD move, Space jump, Left Shift for Shift Lock, Q/E turn, 1 2 3 answer. Player 2: arrows move, Enter jump, Right Shift for Shift Lock, comma/period turn, 8 9 0 answer. Touch: each side has its own joystick &amp; buttons. Two-finger drag looks around. Shift Lock keeps the camera behind you.':'Keyboard: WASD or arrows move, Space jump, Shift for Shift Lock, right-drag or Q/E turn the camera, 1 2 3 answer. Touch: joystick on the left, Jump and Shift Lock on the right. Two-finger drag looks around. Shift Lock keeps the camera behind you.';}
+ $('#aKeys').innerHTML=ACFG.mode===2?'Player 1: WASD move, Space jump, Left Shift for Shift Lock, Q/E or two-finger swipe to turn, 1 2 3 answer. Player 2: arrows move, Enter jump, Right Shift for Shift Lock, comma/period turn, 8 9 0 answer. Touch: each side has its own joystick &amp; buttons. Two-finger drag looks around. Shift Lock keeps the camera behind you.':'Keyboard: WASD or arrows move, Space jump, Shift for Shift Lock, two-finger swipe (or right-drag or Q/E) turns the camera, 1 2 3 answer. Touch: joystick on the left, Jump and Shift Lock on the right. Two-finger drag looks around. Shift Lock keeps the camera behind you.';}
 SEGS.forEach(([id,k,cv])=>$(id).addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b||b.disabled)return;ACFG[k]=cv(b.dataset.v);if(ACFG.mode===1&&ACFG.bots===0)ACFG.bots=1;if(ACFG.bots>6-ACFG.mode)ACFG.bots=6-ACFG.mode;arenaSetupRender();}));
 $('#aGo').onclick=()=>{SFX.key();arenaStart();};
 $('#aQuit').onclick=()=>{if(window.NETA){netArenaQuit();return;}ov(`<h2>Leave the arena?</h2><div class="row"><button class="btn g" id="aStay" data-def>Keep playing</button><button class="btn r" id="aLeave">Leave</button></div>`);$('#aStay').onclick=ovClose;$('#aLeave').onclick=()=>{ovClose();go('arenaSetup');};};
